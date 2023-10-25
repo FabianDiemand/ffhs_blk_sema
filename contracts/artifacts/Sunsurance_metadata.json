@@ -1,0 +1,64 @@
+{
+	"compiler": {
+		"version": "0.8.22+commit.4fc1097e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/sunsurance.sol": "Sunsurance"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/sunsurance.sol": {
+			"keccak256": "0xd9b6dd7287352878c3ca55f80bcaf2f8b3696fe5d6e5473a716e05fe79409dd1",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7a829201aa2e57da61e22e8806d8d6df92ecf9fa4f6dd188305fd7953a22c197",
+				"dweb:/ipfs/QmPqXky5o2mGytqsHzV7QyEPygV9HwMdRLzFoGiNT5KSiQ"
+			]
+		}
+	},
+	"version": 1
+}
