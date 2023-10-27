@@ -35,7 +35,6 @@ contract Sunsurance is ERC20{
 
     event ContractSigning(address indexed client, uint256 timestamp);
 
-
     constructor(address _xCHF) ERC20("SunsuranceToken", "SUNT") {
         _owner = msg.sender;
         xCHF = IERC20(_xCHF);
@@ -96,7 +95,9 @@ contract Sunsurance is ERC20{
     /**
     * @dev Register for Sunsurance with a certain amount of xCHF
     */
-    function register(uint256 _xchfAmount, string calldata _location, uint8 _durationYears) external requireNotInsured requireGreaterOrEqualPremium(_xchfAmount) {
+    function register(uint256 _xchfAmount, string calldata _location, uint8 _durationYears) external 
+        requireNotInsured 
+        requireGreaterOrEqualPremium(_xchfAmount) {
         // TODO Approval process to be allowed to transfer from another account to this contract ?!
         
         // Assign values to potentially safe gas
@@ -129,21 +130,52 @@ contract Sunsurance is ERC20{
     /**
     * @dev Claim Sunsurance insurance
     */
-    function claimSunsurance(uint256 _suntAmount) external requireInsured requireGreaterOrEqualClaim(_suntAmount) {
-        // TODO
+    function claimSunsurance(uint256 _suntAmount) external 
+        requireInsured 
+        requireGreaterOrEqualClaim(_suntAmount) {
+
+        address _sender = msg.sender;
+        uint256 _now = block.timestamp;
+
+        uint256 _xchfAmount = _suntAmount.div(TOKEN_RATION);
+        SunsuranceContract storage _contr = _contracts[_sender];
+
+        _contr._chfValueContributed = _contr._chfValueContributed.sub(_xchfAmount);
+        _contr._suntValueReceived = _contr._suntValueReceived.sub(_suntAmount);
+
+        _claims[_sender].push(_now);
+        xCHF.transfer(_sender, _xchfAmount);
     }
 
     /**
     * @dev Make payment for the Sunsurance insurance
     */
-    function pay(uint _xchfAmount) external requirePaymentDue requireGreaterOrEqualPremium(_xchfAmount) {
+    function pay(uint _xchfAmount) external 
+        requirePaymentDue 
+        requireGreaterOrEqualPremium(_xchfAmount) {
         // TODO
+
+        address _sender = msg.sender;
+        uint256 _now = block.timestamp;
+
+        SunsuranceContract storage _contr = _contracts[_sender];
+        xCHF.transferFrom(_sender, address(this), _xchfAmount);
+
+        uint256 _suntAmount = _xchfAmount.mul(TOKEN_RATION);
+        _contr._chfValueContributed = _contr._chfValueContributed.add(_xchfAmount);
+        _contr._suntValueReceived = _contr._suntValueReceived.add(_suntAmount);
+        _contr._previousPayment = _now;
+        _contr._nextPayment = _now.add(30 days);
+        _payments[_sender].push(_now);
+
+        _mint(_sender, _suntAmount);
     }
 
     /**
     * @dev Get details of own contract
     */
-    function getSunsurance() external requireInsured view returns (SunsuranceContract memory){
+    function getSunsurance() external 
+        requireInsured view returns (SunsuranceContract memory){
         return _contracts[msg.sender];
     }
 }
