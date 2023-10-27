@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/interfaces/IERC20.sol";
 
 contract Sunsurance is ERC20{
     using SafeMath for uint256;
+    using SafeMath for uint8;
 
     address internal _owner;
     IERC20 public immutable xCHF;
@@ -95,8 +96,34 @@ contract Sunsurance is ERC20{
     /**
     * @dev Register for Sunsurance with a certain amount of xCHF
     */
-    function register(uint256 _xchfAmount) external requireNotInsured requireGreaterOrEqualPremium(_xchfAmount) {
-        // TODO
+    function register(uint256 _xchfAmount, string calldata _location, uint8 _durationYears) external requireNotInsured requireGreaterOrEqualPremium(_xchfAmount) {
+        // TODO Approval process to be allowed to transfer from another account to this contract ?!
+        
+        // Assign values to potentially safe gas
+        address _sender = msg.sender;
+        uint256 _now = block.timestamp;
+        uint256 _durationDays = _durationYears.mul(365);
+        
+        xCHF.transferFrom(_sender, address(this), _xchfAmount);
+        uint256 _suntAmount = _xchfAmount.mul(TOKEN_RATION);
+        _contracts[_sender] = SunsuranceContract(
+            _sender,
+            _location,
+            _xchfAmount,
+            _suntAmount,
+            _xchfAmount,
+            _now,
+            _now,
+            _now.add(30 days),
+            _now.add(_durationDays * 1 days)
+        );
+
+        _isRegisteredAddress[_sender] = true;
+        _payments[_sender].push(block.timestamp);
+
+        _mint(_sender, _suntAmount);
+
+        emit ContractSigning(_sender, _now);
     }
 
     /**

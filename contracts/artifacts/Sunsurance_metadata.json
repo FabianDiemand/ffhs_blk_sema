@@ -369,6 +369,16 @@
 						"internalType": "uint256",
 						"name": "_xchfAmount",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "_location",
+						"type": "string"
+					},
+					{
+						"internalType": "uint8",
+						"name": "_durationYears",
+						"type": "uint8"
 					}
 				],
 				"name": "register",
@@ -558,7 +568,7 @@
 				"pay(uint256)": {
 					"details": "Make payment for the Sunsurance insurance"
 				},
-				"register(uint256)": {
+				"register(uint256,string,uint8)": {
 					"details": "Register for Sunsurance with a certain amount of xCHF"
 				},
 				"symbol()": {
@@ -655,11 +665,11 @@
 			]
 		},
 		"contracts/sunsurance.sol": {
-			"keccak256": "0x56e68bdf65ff661a0dedb7dab3301971609442e5e75796359f5e00dbcd6ee1f5",
+			"keccak256": "0x530034211b1ac220e5d25ec101625681069ac9c1fe842b78ef11d5594ee5c900",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e4c8ff336a18f5b24825ba571e65406064ee0d1a5598760a9228d2e2e36fbbaf",
-				"dweb:/ipfs/QmVBDz6idNHz6b6WwJ231adfPD74aC82geyoctGmXJSkwL"
+				"bzz-raw://ed4bf036aaa87c066e22e716fe7015ddb5ff52f58c6f5faa9899c8a15a96560b",
+				"dweb:/ipfs/QmStonyRaAMDUZrrawguZcEeq7bJerzKK48Ek7oq45LVDi"
 			]
 		}
 	},
