@@ -665,11 +665,11 @@
 			]
 		},
 		"contracts/sunsurance.sol": {
-			"keccak256": "0xc4e49cf8cb8135b3919e1b4106d4ad7b57b87f25e75b050ab979f11a286979a5",
+			"keccak256": "0x2ce7fc203d39974fd7a3907247285e9e35be7a16f4712f364d3b7e6fa29afbb5",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://53fd865cf8ab977e1646e944a2bfef82ebcef71139e75325e1f6f0eafa60e526",
-				"dweb:/ipfs/QmTkfY9FkFW9vLa2chkEgKH5ofhrdYphVdeRxqeguS59jE"
+				"bzz-raw://3f806eece83eb0f14e090636f73eba44c0663be23f92e2a86ac4008ebd26e497",
+				"dweb:/ipfs/QmVr7gXak72ABe87jvpgQUbNUjFTSf47WfkrNTb8bWr8Tp"
 			]
 		}
 	},

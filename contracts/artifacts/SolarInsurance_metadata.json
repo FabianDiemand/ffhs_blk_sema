@@ -1,0 +1,340 @@
+{
+	"compiler": {
+		"version": "0.8.22+commit.4fc1097e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "payable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "_allowedClaims",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"name": "_sunshineRecords",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "year",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum SolarInsurance.SwissRegion",
+						"name": "region",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					}
+				],
+				"name": "createSunshineRecord",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "year",
+						"type": "uint256"
+					}
+				],
+				"name": "fileClaim",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "year",
+						"type": "uint256"
+					}
+				],
+				"name": "fileClaimWithoutTimeoutCheck",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "fundContract",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "year",
+						"type": "uint256"
+					}
+				],
+				"name": "getClaimAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "enum SolarInsurance.ClientRiskLevels",
+						"name": "riskLevel",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "panelArea",
+						"type": "uint256"
+					}
+				],
+				"name": "getRequiredPremium",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getSolarInsurance",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "client",
+								"type": "address"
+							},
+							{
+								"internalType": "enum SolarInsurance.SwissRegion",
+								"name": "panelLocation",
+								"type": "uint8"
+							},
+							{
+								"internalType": "enum SolarInsurance.ClientRiskLevels",
+								"name": "riskLevel",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint256",
+								"name": "panelArea",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "premiumToPay",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "registrationDate",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "duration",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "claimTimeout",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct SolarInsurance.SolarInsuranceContract",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "enum SolarInsurance.ClientRiskLevels",
+						"name": "riskLevel",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "panelArea",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum SolarInsurance.SwissRegion",
+						"name": "location",
+						"type": "uint8"
+					}
+				],
+				"name": "registerPolicy",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "renewPolicy",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"fileClaim(uint256)": {
+					"details": "File Claim for Insurance"
+				},
+				"fileClaimWithoutTimeoutCheck(uint256)": {
+					"details": "File a claim without checking the timeout (for demo purpose only!!)"
+				},
+				"fundContract()": {
+					"details": "Load contract with some eth to be able to payout claims (for demo purpose only!!)"
+				},
+				"getRequiredPremium(uint8,uint256)": {
+					"details": "Get required premium"
+				},
+				"getSolarInsurance()": {
+					"details": "Get details of own contract"
+				},
+				"registerPolicy(uint8,uint256,uint8)": {
+					"details": "Register for Solar Insurance Policy"
+				},
+				"renewPolicy()": {
+					"details": "Renew Solar Insurance Policy"
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/solar_insurance.sol": "SolarInsurance"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/utils/Strings.sol": {
+			"keccak256": "0x55f102ea785d8399c0e58d1108e2d289506dde18abc6db1b7f68c1f9f9bc5792",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6e52e0a7765c943ef14e5bcf11e46e6139fa044be564881378349236bf2e3453",
+				"dweb:/ipfs/QmZEeeXoFPW47amyP35gfzomF9DixqqTEPwzBakv6cZw6i"
+			]
+		},
+		"@openzeppelin/contracts/utils/math/Math.sol": {
+			"keccak256": "0x005ec64c6313f0555d59e278f9a7a5ab2db5bdc72a027f255a37c327af1ec02d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://4ece9f0b9c8daca08c76b6b5405a6446b6f73b3a15fab7ff56e296cbd4a2c875",
+				"dweb:/ipfs/QmQyRpyPRL5SQuAgj6SHmbir3foX65FJjbVTTQrA2EFg6L"
+			]
+		},
+		"@openzeppelin/contracts/utils/math/SafeMath.sol": {
+			"keccak256": "0x58b21219689909c4f8339af00813760337f7e2e7f169a97fe49e2896dcfb3b9a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ef8e012e946dec20e59f2d4446f4b44bb098f3fa8bac103b1b5112fff777447b",
+				"dweb:/ipfs/QmVTooKWcLkJ9W68yNX4MgdrbAKiAXwuRN9A7f4NkdcdtQ"
+			]
+		},
+		"@openzeppelin/contracts/utils/math/SignedMath.sol": {
+			"keccak256": "0x5f7e4076e175393767754387c962926577f1660dd9b810187b9002407656be72",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7d533a1c97cd43a57cd9c465f7ee8dd0e39ae93a8fb8ff8e5303a356b081cdcc",
+				"dweb:/ipfs/QmVBEei6aTnvYNZp2CHYVNKyZS4q1KkjANfY39WVXZXVoT"
+			]
+		},
+		"contracts/solar_insurance.sol": {
+			"keccak256": "0x1919cf68ec681ab80044713ac4fc87b076d69c5cbf3e9898309b74c420e18c24",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d6e1246ca2462e063f6f60f4b88755ef26e1b5eb479e30abfd1814ae7d6a5e22",
+				"dweb:/ipfs/QmbF4zmEJPMJZz6thTehB88xLYqEGzACn9fXgwNxmdEeqv"
+			]
+		}
+	},
+	"version": 1
+}
