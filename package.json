@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "compile": "npx hardhat compile",
-    "deploy": "npx hardhat run scripts/deploy.js --network sepolia"
+    "deploy": "npx hardhat run scripts/deploy.js --network sepolia",
+    "interact": "npx hardhat run scripts/interact.js --network sepolia"
   },
   "repository": {
     "type": "git",
