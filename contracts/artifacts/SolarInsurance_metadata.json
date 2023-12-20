@@ -7,7 +7,7 @@
 		"abi": [
 			{
 				"inputs": [],
-				"stateMutability": "payable",
+				"stateMutability": "nonpayable",
 				"type": "constructor"
 			},
 			{
@@ -51,14 +51,33 @@
 			{
 				"inputs": [
 					{
+						"internalType": "enum SolarInsurance.ClientRiskLevels",
+						"name": "riskLevel",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "panelArea",
+						"type": "uint256"
+					}
+				],
+				"name": "calculatePremium",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "uint256",
 						"name": "year",
 						"type": "uint256"
-					},
-					{
-						"internalType": "enum SolarInsurance.SwissRegion",
-						"name": "region",
-						"type": "uint8"
 					},
 					{
 						"internalType": "uint256",
@@ -126,22 +145,17 @@
 			{
 				"inputs": [
 					{
-						"internalType": "enum SolarInsurance.ClientRiskLevels",
-						"name": "riskLevel",
-						"type": "uint8"
-					},
-					{
 						"internalType": "uint256",
-						"name": "panelArea",
+						"name": "year",
 						"type": "uint256"
 					}
 				],
-				"name": "getRequiredPremium",
+				"name": "getRecordsKey",
 				"outputs": [
 					{
-						"internalType": "uint256",
+						"internalType": "string",
 						"name": "",
-						"type": "uint256"
+						"type": "string"
 					}
 				],
 				"stateMutability": "view",
@@ -185,7 +199,7 @@
 							},
 							{
 								"internalType": "uint256",
-								"name": "duration",
+								"name": "validUntil",
 								"type": "uint256"
 							},
 							{
@@ -194,7 +208,7 @@
 								"type": "uint256"
 							}
 						],
-						"internalType": "struct SolarInsurance.SolarInsuranceContract",
+						"internalType": "struct SolarInsurance.SolarInsurancePolicy",
 						"name": "",
 						"type": "tuple"
 					}
@@ -249,20 +263,17 @@
 		"devdoc": {
 			"kind": "dev",
 			"methods": {
+				"calculatePremium(uint8,uint256)": {
+					"details": "Calculate required premium"
+				},
 				"fileClaim(uint256)": {
 					"details": "File Claim for Insurance"
 				},
-				"fileClaimWithoutTimeoutCheck(uint256)": {
-					"details": "File a claim without checking the timeout (for demo purpose only!!)"
-				},
-				"fundContract()": {
-					"details": "Load contract with some eth to be able to payout claims (for demo purpose only!!)"
-				},
-				"getRequiredPremium(uint8,uint256)": {
-					"details": "Get required premium"
-				},
 				"getSolarInsurance()": {
 					"details": "Get details of own contract"
+				},
+				"owner()": {
+					"details": "Get owner's address"
 				},
 				"registerPolicy(uint8,uint256,uint8)": {
 					"details": "Register for Solar Insurance Policy"
@@ -281,7 +292,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/solar_insurance.sol": "SolarInsurance"
+			"contracts/SolarInsurance.sol": "SolarInsurance"
 		},
 		"evmVersion": "shanghai",
 		"libraries": {},
@@ -327,12 +338,28 @@
 				"dweb:/ipfs/QmVBEei6aTnvYNZp2CHYVNKyZS4q1KkjANfY39WVXZXVoT"
 			]
 		},
-		"contracts/solar_insurance.sol": {
-			"keccak256": "0x1919cf68ec681ab80044713ac4fc87b076d69c5cbf3e9898309b74c420e18c24",
+		"contracts/SolarInsurance.sol": {
+			"keccak256": "0x3cb66f35ab28e86cf65a3a90bf4fbf2b94004ccc0a3abb3b7b442e66f0b05a2a",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d6e1246ca2462e063f6f60f4b88755ef26e1b5eb479e30abfd1814ae7d6a5e22",
-				"dweb:/ipfs/QmbF4zmEJPMJZz6thTehB88xLYqEGzACn9fXgwNxmdEeqv"
+				"bzz-raw://955f44e977033f17e9d59c7fe6465fefc209d5e8b06433a52c3aa929fbbe9a60",
+				"dweb:/ipfs/QmNNn5WZnXCSCAaAdrcYbuqbizSyvFd2JpanPeCrAGeyf1"
+			]
+		},
+		"libraries/Demoable.sol": {
+			"keccak256": "0xc72b01e2b05bb4a9c603844d7b7a4323973552c36067a5983e103b8dc929fa1e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f0a470acf50901e6878028ba2a4e85fb98ed93a06310500ada5220c2dc71a77e",
+				"dweb:/ipfs/QmfXQ2mNa1TUMfRuCVarTfPfS34xMrUvarMMtmTiTikB8w"
+			]
+		},
+		"libraries/Utils.sol": {
+			"keccak256": "0x8ebe433afb49d89781b3c552014bcc90f5097abfdbfdaa8615ac5337921e8a0c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8ce56b3a63bcf888ae437bee09fc933cb08347a6e0637f7389ddb0afee631586",
+				"dweb:/ipfs/QmUFn8RDQMZ3yfVLyp1stw8mAquzmpbSnP3vEJrBKwYa3t"
 			]
 		}
 	},

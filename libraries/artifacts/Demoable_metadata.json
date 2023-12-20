@@ -1,0 +1,53 @@
+{
+	"compiler": {
+		"version": "0.8.22+commit.4fc1097e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "fundContract",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"libraries/Demoable.sol": "Demoable"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"libraries/Demoable.sol": {
+			"keccak256": "0xc72b01e2b05bb4a9c603844d7b7a4323973552c36067a5983e103b8dc929fa1e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f0a470acf50901e6878028ba2a4e85fb98ed93a06310500ada5220c2dc71a77e",
+				"dweb:/ipfs/QmfXQ2mNa1TUMfRuCVarTfPfS34xMrUvarMMtmTiTikB8w"
+			]
+		}
+	},
+	"version": 1
+}
