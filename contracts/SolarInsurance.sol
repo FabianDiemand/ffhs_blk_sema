@@ -1,10 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.22;
 
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-
-import "../libraries/Fundable.sol";
-import "../libraries/Utils.sol";
+import "./libraries/Fundable.sol";
+import "./libraries/Utils.sol";
 
 /**
 * @title An insurance for solar power
@@ -16,9 +14,6 @@ import "../libraries/Utils.sol";
 * @custom:educational This contract is intended only as an educational piece of work. No productive use is intended.
 */
 contract SolarInsurance is Fundable {
-    using SafeMath for uint256;
-    using SafeMath for uint8;
-
     address internal _owner;
 
     uint256 internal _ENERGY_PRICE = 0.00016 ether; // price of 1 kWh from the mainnet
@@ -107,8 +102,8 @@ contract SolarInsurance is Fundable {
             panelArea,
             panelArea * _insuranceLevels[riskLevel].premium, // premium to pay
             block.timestamp, // time of registration
-            block.timestamp.add(1 * 365 days), // valid until
-            block.timestamp.add(1 * 365 days) // timeout for claims (first claim possible after 1 year)
+            block.timestamp + 365 days, // valid until
+            block.timestamp + 365 days // timeout for claims (first claim possible after 1 year)
         );
 
         uint256 yearInSeconds = 60 * 60 * 24 * 365;
@@ -133,7 +128,7 @@ contract SolarInsurance is Fundable {
             _policies[msg.sender].panelArea
         )
     {
-        _policies[msg.sender].validUntil.add(365 days);
+        _policies[msg.sender].validUntil += 365 days;
     }
 
     /**
@@ -160,7 +155,7 @@ contract SolarInsurance is Fundable {
         payable(msg.sender).transfer(amount);
 
         // extend the timeout by one year
-        p.claimTimeout.add(1 * 365 days);
+        p.claimTimeout += 365 days;
         if (p.validUntil > 0) {
             // add a new year to be allowed for claims, if the validity allows it
             _allowedClaims[msg.sender] += 1;
@@ -275,7 +270,7 @@ contract SolarInsurance is Fundable {
         payable(msg.sender).transfer(claimAmount);
 
         // Update the claim timeout and allowed claims for the client
-        _policies[msg.sender].claimTimeout.add(1 * 365 days);
+        _policies[msg.sender].claimTimeout += 365 days;
         if (_policies[msg.sender].validUntil > 0) {
             _allowedClaims[msg.sender] += 1;
         }

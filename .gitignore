@@ -1,0 +1,9 @@
+# npm dependency directories
+node_modules
+
+# Environment variables
+.env
+
+# Hardhat compilation products
+artifacts
+cache
