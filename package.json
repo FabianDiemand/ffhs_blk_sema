@@ -4,7 +4,8 @@
   "description": "The contract is intended to cover damages in form of additional costs resulting from having to consume power from the mainnet. This contract is intended only as an educational piece of work. No productive use is intended.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "npx hardhat compile",
+    "deploy": "npx hardhat run scripts/deploy.js --network sepolia"
   },
   "repository": {
     "type": "git",
