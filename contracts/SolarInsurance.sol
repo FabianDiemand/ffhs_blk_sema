@@ -3,10 +3,19 @@ pragma solidity 0.8.22;
 
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-import "../libraries/Demoable.sol";
+import "../libraries/Fundable.sol";
 import "../libraries/Utils.sol";
 
-contract SolarInsurance is Demoable {
+/**
+* @title An insurance for solar power
+* @author Fabian Diemand
+*
+* @notice The contract is intended to cover damages in form of additional costs resulting from having to consume power from the mainnet.
+* @notice Such damages can result from a lack of sunshine, which limits the power output of photovoltaic panels.
+*
+* @custom:educational This contract is intended only as an educational piece of work. No productive use is intended.
+*/
+contract SolarInsurance is Fundable {
     using SafeMath for uint256;
     using SafeMath for uint8;
 
@@ -16,22 +25,22 @@ contract SolarInsurance is Demoable {
     uint256 internal _RADIATION_VALUE = 150; // radiation value in watts per square meter
     uint256 internal _EFFICIENCY = 20; // efficiency of the solar module in %
 
-    // SolarInsurance Policy
+    // SolarInsurancePolicy struct modelling the metadata for a solar insurance policy
     struct SolarInsurancePolicy {
-        address client;
-        SwissRegion panelLocation;
-        ClientRiskLevels riskLevel;
-        uint256 panelArea;
-        uint256 premiumToPay;
-        uint256 registrationDate;
-        uint256 validUntil; // validity duration of the policy (can be more than one year, hence the differenciation from the claim timeout)
-        uint256 claimTimeout; // limit the claims to one each year
+        address client; // The address of the client.
+        SwissRegion panelLocation; // The location of the solar panel (SOUTH or NORTH).
+        ClientRiskLevels riskLevel; // The risk level the client wants to insure (HIGH, MID, LOW).
+        uint256 panelArea; // The area of the solar panel in square meters.
+        uint256 premiumToPay; // The premium amount to be paid by the client.
+        uint256 registrationDate; // The timestamp of the policy registration.
+        uint256 validUntil; // The timestamp until which the policy is valid.
+        uint256 claimTimeout; // The timestamp before which no claims can be filed.
     }
 
     // SolarInsurance Risk Levels (from client perspective)
     struct InsuranceLevel {
-        uint256 premium;
-        uint256 insuredHours;
+        uint256 premium; // The premium per panel square meter per year.
+        uint256 insuredHours; // The expected amount of yearly sunshine hours.
     }
     enum ClientRiskLevels {
         HIGH,
@@ -46,7 +55,7 @@ contract SolarInsurance is Demoable {
         SOUTH,
         NORTH
     }
-    mapping(string => uint256) public _sunshineRecords;
+    mapping(string => uint256) _sunshineRecords;
 
     // Mappings for contracts, clients, claims and payments
     struct Claim {
@@ -54,31 +63,39 @@ contract SolarInsurance is Demoable {
         uint256 amount;
     }
     mapping(address => SolarInsurancePolicy) _policies;
-    mapping(address => uint256) public _allowedClaims;
+    mapping(address => uint256) _allowedClaims;
     mapping(address => Claim[]) _claims;
     mapping(address => uint256[]) _payments;
 
     constructor() {
         _owner = msg.sender;
+        // Instantiate the risk levels to be covered
         _insuranceLevels[ClientRiskLevels.HIGH] = InsuranceLevel(
-            0.00005 ether,
-            1639
+            0.00005 ether, 
+            1639 
         );
-
         _insuranceLevels[ClientRiskLevels.MID] = InsuranceLevel(
             0.00012 ether,
             1721
         );
-
         _insuranceLevels[ClientRiskLevels.LOW] = InsuranceLevel(
             0.00035 ether,
             1803
         );
     }
 
-    /**
-     * @dev Register for Solar Insurance Policy
-     */
+    /*
+    * @notice Registers a Solar Insurance Policy.
+    * 
+    * @param riskLevel The risk level of the client (HIGH, MID, LOW).
+    * @param panelArea The area of the solar panel in square meters.
+    * @param location The location of the solar panel (SOUTH or NORTH).
+    * @return void
+    * 
+    * @dev Requirements:
+    * @dev - The client must not be actively insured.
+    * @dev - The premium must be covered by the amount of wei sent with the message.
+    */
     function registerPolicy(ClientRiskLevels riskLevel, uint256 panelArea, SwissRegion location) public payable
         requireNotInsured
         requirePremiumCovered(riskLevel, panelArea)
@@ -101,9 +118,15 @@ contract SolarInsurance is Demoable {
     }
 
     /**
-     * @dev Renew Solar Insurance Policy
+     * @notice Extend an existing Solar Insurance Policy by a year
+     * @dev The policy will be extended for another year from the current validUntil timestamp.
+     *
+     * @dev Requirements:
+     * @dev - The client must be insured.
+     * @dev - The policy must still be active.
+     * @dev - The premium must be covered by the amount of wei sent with the message.
      */
-    function renewPolicy() public payable
+    function extendPolicy() public payable
         requireInsured
         requirePremiumCovered(
             _policies[msg.sender].riskLevel,
@@ -114,7 +137,15 @@ contract SolarInsurance is Demoable {
     }
 
     /**
-     * @dev File Claim for Insurance
+     * @notice Allows the client to file a claim for insurance for a specific year.
+     *
+     * @param year The year for which the claim is filed.
+     *
+     * @dev Requirements:
+     * @dev - The client must be insured.
+     * @dev - There must be no timeout for client's claims.
+     * @dev - The specified year must be claimable by the client.
+     * @dev - There must be a recorded sunshine duration for the specified year and region.
      */
     function fileClaim(uint256 year) public
         requireInsured
@@ -124,39 +155,68 @@ contract SolarInsurance is Demoable {
     {
         SolarInsurancePolicy memory p = _policies[msg.sender];
 
+        // transfer the claimable amount (in wei)
         uint256 amount = getClaimAmount(year);
         payable(msg.sender).transfer(amount);
 
+        // extend the timeout by one year
         p.claimTimeout.add(1 * 365 days);
         if (p.validUntil > 0) {
+            // add a new year to be allowed for claims, if the validity allows it
             _allowedClaims[msg.sender] += 1;
         }
     }
 
     /**
-     * @dev Get owner's address
-     */
+    * @notice Get owner's address
+    *
+    * @return The address of the contract owner.
+    */
     function owner() public view returns (address) {
         return _owner;
     }
 
     /**
-     * @dev Get details of own contract
-     */
-    function getSolarInsurance() public view
+    * @notice Get details of own policy
+    * 
+    * @return The SolarInsurancePolicy with the data from the client's policy
+    * 
+    * @dev Requirements:
+    * @dev - The sender must be insured.
+    */
+    function getPolicyInformation() public view
         requireInsured
         returns (SolarInsurancePolicy memory){
         return _policies[msg.sender];
     }
 
     /**
-     * @dev Calculate required premium
-     */
+    * @notice Calculate the required premium for a Solar Insurance Policy.
+    *
+    * @param riskLevel The risk level of the client (HIGH, MID, LOW).
+    * @param panelArea The area of the solar panel (in square meters).
+    * @return The calculated premium in wei.
+    */
     function calculatePremium(ClientRiskLevels riskLevel, uint256 panelArea) public view returns (uint256){
         return panelArea * _insuranceLevels[riskLevel].premium; // premium to pay
     }
 
-        function getClaimAmount(uint256 year) public view returns (uint256) {
+    /**
+     * @notice Calculates the amount of claim in wei that can be filed for the specified year.
+     *
+     * @dev The claim amount is calculated based on the difference between the insured hours of sunshine in the specified year and region and the recorded sunshine duration,
+     * @dev multiplied by the radiation value, the efficiency of the solar module, the panel area, and the energy price.
+     * @dev The calculated amount is then divided by 100'000 to account for the efficiency being used as a decimal (/ 100) and the radiation value being used as kilowatts (/ 1000).
+     *
+     * @dev Requirements:
+     * @dev - The client must be insured.
+     * @dev - The claim year must be claimable by the client.
+     * @dev - There must be a recorded sunshine duration for the specified year and region.
+     * 
+     * @param year The year for which the claim amount is calculated.
+     * @return The amount to be claimed in wei.
+     */
+    function getClaimAmount(uint256 year) internal view returns (uint256) {
         string memory key = getRecordsKey(year);
 
         SolarInsurancePolicy memory p = _policies[msg.sender];
@@ -165,7 +225,16 @@ contract SolarInsurance is Demoable {
         return amount / 100000;
     }
 
-    function getRecordsKey(uint256 year) public view returns (string memory){
+    /**
+    * @notice Get the records key for a specific year.
+    *
+    * @param year The year for which the records key is needed.
+    * @return The records key in the format "<year>_<region>", e.g. "2023_SOUTH".
+    */
+    function getRecordsKey(uint256 year) internal view 
+        requireInsured
+        returns (string memory)
+    {
         bool isLocationSouth = _policies[msg.sender].panelLocation == SwissRegion.SOUTH;
         string memory key = isLocationSouth ? Utils.getRecordId(year, "_SOUTH") : Utils.getRecordId(year, "_NORTH");
 
@@ -173,29 +242,30 @@ contract SolarInsurance is Demoable {
     }
 
     /*
-     * @dev Record the sunshine duration for a specific year and region.
+     * @notice Record the sunshine duration for a specific year and region.
+     *
      * @param year The year for which the sunshine duration is recorded.
      * @param region The region for which the sunshine duration is recorded (SOUTH or NORTH).
      * @param duration The duration of sunshine in the specified year and region.
      */
-    function createSunshineRecord(uint256 year, uint256 duration) public {
-        string memory key = getRecordsKey(year);
+    function createSunshineRecord(uint256 year, uint256 duration, SwissRegion region) public {
+        bool isLocationSouth = region == SwissRegion.SOUTH;
+        string memory key = isLocationSouth ? Utils.getRecordId(year, "_SOUTH") : Utils.getRecordId(year, "_NORTH");
         _sunshineRecords[key] = duration;
     }
 
     /*
-     * @dev File a claim without checking the timeout (for demo purpose only!!)
+     * @notice File a claim without checking the timeout (for demo purpose only!!)
      * @param year The year for which the claim is filed.
      * @return claimAmount The amount of the claim in wei.
      *
-     * Requirements:
-     * - Client must be insured.
-     * - Client must be allowed to file a claim for the specified year.
-     * - There must be a recorded sunshine duration for the specified year and region.
+     * @dev Requirements:
+     * @dev - Client must be insured.
+     * @dev - Client must be allowed to file a claim for the specified year.
+     * @dev - There must be a recorded sunshine duration for the specified year and region.
      */
-    function fileClaimWithoutTimeoutCheck(uint256 year) public
+    function fileClaimWithoutChecks(uint256 year) public
         requireInsured
-        requireYearClaimable(year)
         requireRecordExists(year) {
 
         // Calculate the claim amount
@@ -212,10 +282,10 @@ contract SolarInsurance is Demoable {
     }
 
     /*
-     * @dev Modifier to require sender being the owner (DRY)
+     * @notice Modifier to require sender being the owner (DRY)
      * 
-     * Requirements:
-     * - Sender must be owner.
+     * @dev Requirements:
+     * @dev - Sender must be owner.
      */
     modifier requireOwner() {
         bool senderIsOwner = msg.sender == _owner;
@@ -227,10 +297,10 @@ contract SolarInsurance is Demoable {
     }
 
     /*
-    * @dev: Modifier to require a valid sender address (DRY)
+    * @dev Modifier to require a valid sender address (DRY)
     *
-    * Requirements:
-    * - Sender must have an address other than the zero-address
+    * @dev Requirements:
+    * @dev - Sender must have an address other than the zero-address
     */
     modifier requireValidAddress(){
         bool isValidAddress = msg.sender != address(0);
@@ -244,8 +314,8 @@ contract SolarInsurance is Demoable {
     /*
      * @dev Modifier to require the premium being covered by the amount of wei sent with the message (DRY)
      * 
-     * Requirements:
-     * - Wei of message must cover the premium.
+     * @dev Requirements:
+     * @dev - Wei of message must cover the premium.
      */
     modifier requirePremiumCovered(ClientRiskLevels riskLevel, uint256 panelArea) {
         // Calculate the premium for the policies risk level and the insured panel area
@@ -262,8 +332,8 @@ contract SolarInsurance is Demoable {
     /**
      * @dev Modifier to require the sender not being insured already (DRY)
      * 
-     * Requirements:
-     * - There must be no active policy registered for the senders address
+     * @dev Requirements:
+     * @dev - There must be no active policy registered for the senders address
      */
     modifier requireNotInsured() {
         bool noPolicyRegistered = _policies[msg.sender].client == address(0);
@@ -279,9 +349,9 @@ contract SolarInsurance is Demoable {
     /**
      * @dev Modifier to require the sender being insured already (DRY)
      * 
-     * Requirements:
-     * - There must be a policy registered for the sender address
-     * - The registered policy must still be active
+     * @dev Requirements:
+     * @dev - There must be a policy registered for the sender address
+     * @dev - The registered policy must still be active
      */
     modifier requireInsured() {
         bool policyRegistered = _policies[msg.sender].client != address(0);
@@ -297,8 +367,8 @@ contract SolarInsurance is Demoable {
     /**
      * @dev Modifier to require an existing sunshine record for a given year (DRY)
      * 
-     * Requirements:
-     * - A sunshine duration must be recorded for a given year
+     * @dev Requirements:
+     * @dev - A sunshine duration must be recorded for a given year
      */
     modifier requireRecordExists(uint256 year) {
         string memory key = getRecordsKey(year);
@@ -306,7 +376,7 @@ contract SolarInsurance is Demoable {
         bool recordExists = _sunshineRecords[key] != 0;
         require(
             recordExists,
-            "There is no record for the required year."
+            "There is no record for the required year or region."
         );
         _;
     }
@@ -314,14 +384,14 @@ contract SolarInsurance is Demoable {
     /**
      * @dev Modifier to require the sender being insured already (DRY)
      * 
-     * Requirements:
-     * - There must be a policy registered for the sender address
-     * - The registered policy must still be active
+     * @dev Requirements:
+     * @dev - There must be a policy registered for the sender address
+     * @dev - The registered policy must still be active
      */
     modifier requireNoClaimTimeout() {
         bool claimsOnTimeout = _policies[msg.sender].claimTimeout < block.timestamp;
         require(
-            claimsOnTimeout,
+            !claimsOnTimeout,
             "Claims can only be filed every year."
         );
         _;
@@ -330,14 +400,14 @@ contract SolarInsurance is Demoable {
     /**
      * @dev Modifier to require a year to be claimable by the sender (DRY)
      * 
-     * Requirements:
-     * - The given year must be in the list of allowed claims for the sender
+     * @dev Requirements:
+     * @dev - The given year must be in the list of allowed claims for the sender
      */
     modifier requireYearClaimable(uint256 year) {
         bool isYearClaimable = _allowedClaims[msg.sender] == year;
         require(
            isYearClaimable,
-            "You cannot file a claim for the desired year."
+            "The specified year is not allowing a claim for your policy."
         );
         _;
     }

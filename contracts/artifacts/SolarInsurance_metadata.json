@@ -13,44 +13,6 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "_allowedClaims",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
-					}
-				],
-				"name": "_sunshineRecords",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
 						"internalType": "enum SolarInsurance.ClientRiskLevels",
 						"name": "riskLevel",
 						"type": "uint8"
@@ -83,11 +45,23 @@
 						"internalType": "uint256",
 						"name": "duration",
 						"type": "uint256"
+					},
+					{
+						"internalType": "enum SolarInsurance.SwissRegion",
+						"name": "region",
+						"type": "uint8"
 					}
 				],
 				"name": "createSunshineRecord",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "extendPolicy",
+				"outputs": [],
+				"stateMutability": "payable",
 				"type": "function"
 			},
 			{
@@ -111,7 +85,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "fileClaimWithoutTimeoutCheck",
+				"name": "fileClaimWithoutChecks",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -124,46 +98,8 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "year",
-						"type": "uint256"
-					}
-				],
-				"name": "getClaimAmount",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "year",
-						"type": "uint256"
-					}
-				],
-				"name": "getRecordsKey",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [],
-				"name": "getSolarInsurance",
+				"name": "getPolicyInformation",
 				"outputs": [
 					{
 						"components": [
@@ -251,42 +187,66 @@
 				"outputs": [],
 				"stateMutability": "payable",
 				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "renewPolicy",
-				"outputs": [],
-				"stateMutability": "payable",
-				"type": "function"
 			}
 		],
 		"devdoc": {
+			"author": "Fabian Diemand",
+			"custom:educational": "This contract is intended only as an educational piece of work. No productive use is intended.",
 			"kind": "dev",
 			"methods": {
 				"calculatePremium(uint8,uint256)": {
-					"details": "Calculate required premium"
+					"params": {
+						"panelArea": "The area of the solar panel (in square meters).",
+						"riskLevel": "The risk level of the client (HIGH, MID, LOW)."
+					},
+					"returns": {
+						"_0": "The calculated premium in wei."
+					}
+				},
+				"extendPolicy()": {
+					"details": "The policy will be extended for another year from the current validUntil timestamp.Requirements:- The client must be insured.- The policy must still be active.- The premium must be covered by the amount of wei sent with the message."
 				},
 				"fileClaim(uint256)": {
-					"details": "File Claim for Insurance"
+					"details": "Requirements:- The client must be insured.- There must be no timeout for client's claims.- The specified year must be claimable by the client.- There must be a recorded sunshine duration for the specified year and region.",
+					"params": {
+						"year": "The year for which the claim is filed."
+					}
 				},
-				"getSolarInsurance()": {
-					"details": "Get details of own contract"
+				"getPolicyInformation()": {
+					"details": "Requirements:- The sender must be insured.",
+					"returns": {
+						"_0": "The SolarInsurancePolicy with the data from the client's policy "
+					}
 				},
 				"owner()": {
-					"details": "Get owner's address"
-				},
-				"registerPolicy(uint8,uint256,uint8)": {
-					"details": "Register for Solar Insurance Policy"
-				},
-				"renewPolicy()": {
-					"details": "Renew Solar Insurance Policy"
+					"returns": {
+						"_0": "The address of the contract owner."
+					}
 				}
 			},
+			"title": "An insurance for solar power",
 			"version": 1
 		},
 		"userdoc": {
 			"kind": "user",
-			"methods": {},
+			"methods": {
+				"calculatePremium(uint8,uint256)": {
+					"notice": "Calculate the required premium for a Solar Insurance Policy."
+				},
+				"extendPolicy()": {
+					"notice": "Extend an existing Solar Insurance Policy by a year"
+				},
+				"fileClaim(uint256)": {
+					"notice": "Allows the client to file a claim for insurance for a specific year."
+				},
+				"getPolicyInformation()": {
+					"notice": "Get details of own policy "
+				},
+				"owner()": {
+					"notice": "Get owner's address"
+				}
+			},
+			"notice": "The contract is intended to cover damages in form of additional costs resulting from having to consume power from the mainnet.Such damages can result from a lack of sunshine, which limits the power output of photovoltaic panels.",
 			"version": 1
 		}
 	},
@@ -339,19 +299,19 @@
 			]
 		},
 		"contracts/SolarInsurance.sol": {
-			"keccak256": "0x3cb66f35ab28e86cf65a3a90bf4fbf2b94004ccc0a3abb3b7b442e66f0b05a2a",
+			"keccak256": "0xb4df47137cfc3a024be348faba37c7760ea56a89070d56494ae008cb95a1ec5e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://955f44e977033f17e9d59c7fe6465fefc209d5e8b06433a52c3aa929fbbe9a60",
-				"dweb:/ipfs/QmNNn5WZnXCSCAaAdrcYbuqbizSyvFd2JpanPeCrAGeyf1"
+				"bzz-raw://9d3e445be186d408234b47cfced43aa46fc23f6237c78ad22ec5e6e03e26ee94",
+				"dweb:/ipfs/QmPBKupHqK7Y2BQtXmKPDgmXQVnD1kccc2jjBnpgTKj8h4"
 			]
 		},
-		"libraries/Demoable.sol": {
-			"keccak256": "0xc72b01e2b05bb4a9c603844d7b7a4323973552c36067a5983e103b8dc929fa1e",
+		"libraries/Fundable.sol": {
+			"keccak256": "0x96e2d606b140477909443ea5860dfcd85bec648108c45e08d8fc48676a10574f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f0a470acf50901e6878028ba2a4e85fb98ed93a06310500ada5220c2dc71a77e",
-				"dweb:/ipfs/QmfXQ2mNa1TUMfRuCVarTfPfS34xMrUvarMMtmTiTikB8w"
+				"bzz-raw://6900e56d50b00348b2c851248884c27d09e6e6d18e15b84285b59db71bfb57b5",
+				"dweb:/ipfs/QmQULAtsoF5jsvw4iRMMfVFpGKjug78yZX6xRe3LkX985N"
 			]
 		},
 		"libraries/Utils.sol": {

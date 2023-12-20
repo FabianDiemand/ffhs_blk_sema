@@ -30,7 +30,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"libraries/Demoable.sol": "Demoable"
+			"libraries/Demoable.sol": "Fundab"
 		},
 		"evmVersion": "shanghai",
 		"libraries": {},
@@ -45,11 +45,11 @@
 	},
 	"sources": {
 		"libraries/Demoable.sol": {
-			"keccak256": "0x618bedf1b4dede857a9f3513b2fa60724147d0479f1d48c3733b57c886f7c99b",
+			"keccak256": "0xc81e765d21d99321497d9d45665502bb18fad015e9f909b0d1a3e0dfb20d083e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://514f77257bb3890e5d07e3458cb0be65535fbc04ca8445613322daf27458d559",
-				"dweb:/ipfs/QmbCBN5ks8KCMmqU322mn4BnTKXJZ9BVsu1dQ2zE6W5KEJ"
+				"bzz-raw://b4661364112551577cbd392042af7962a30f968fd3acb70e1cc8d113e8a483b3",
+				"dweb:/ipfs/QmPzGeUv9eXahKmLqXUhyjAeRhhxphnjQ1zsEm9Tybjfkf"
 			]
 		}
 	},

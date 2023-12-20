@@ -1,5 +1,5 @@
 {
-	"id": "9ac83d8c78b5c1b46ea73c1f3c8e2388",
+	"id": "faaeeb7ac2ea41679902b141eb606e91",
 	"_format": "hh-sol-build-info-1",
 	"solcVersion": "0.8.22",
 	"solcLongVersion": "0.8.22+commit.4fc1097e",
@@ -7,7 +7,7 @@
 		"language": "Solidity",
 		"sources": {
 			"libraries/Utils.sol": {
-				"content": "// SPDX-License-Identifier: MIT\r\npragma solidity 0.8.22;\r\n\r\nimport \"@openzeppelin/contracts/utils/Strings.sol\";\r\n\r\nlibrary Utils {\r\n    function getRecordId(uint256 year, string memory region) internal pure returns(string memory){\r\n        return string.concat(Strings.toString(year), region);\r\n    }\r\n}"
+				"content": "// SPDX-License-Identifier: MIT\r\npragma solidity 0.8.22;\r\n\r\nimport \"@openzeppelin/contracts/utils/Strings.sol\";\r\n\r\n/**\r\n* @title An library for utility functions of the solar insurance contract\r\n* @author Fabian Diemand\r\n*\r\n* @notice The library contains several utility functions.\r\n*\r\n* @custom:educational This library is intended only as an educational piece of work. No productive use is intended.\r\n*/\r\nlibrary Utils {\r\n    \r\n    /**\r\n     * @dev Concatenates the year and region to generate a sunshine record ID.\r\n     * @param year The year for the record.\r\n     * @param region The region for the record.\r\n     * @return The generated record ID.\r\n     */\r\n    function getRecordId(uint256 year, string memory region) internal pure returns(string memory){\r\n        return string.concat(Strings.toString(year), region);\r\n    }\r\n}"
 			},
 			"@openzeppelin/contracts/utils/Strings.sol": {
 				"content": "// SPDX-License-Identifier: MIT\n// OpenZeppelin Contracts (last updated v5.0.0) (utils/Strings.sol)\n\npragma solidity ^0.8.20;\n\nimport {Math} from \"./math/Math.sol\";\nimport {SignedMath} from \"./math/SignedMath.sol\";\n\n/**\n * @dev String operations.\n */\nlibrary Strings {\n    bytes16 private constant HEX_DIGITS = \"0123456789abcdef\";\n    uint8 private constant ADDRESS_LENGTH = 20;\n\n    /**\n     * @dev The `value` string doesn't fit in the specified `length`.\n     */\n    error StringsInsufficientHexLength(uint256 value, uint256 length);\n\n    /**\n     * @dev Converts a `uint256` to its ASCII `string` decimal representation.\n     */\n    function toString(uint256 value) internal pure returns (string memory) {\n        unchecked {\n            uint256 length = Math.log10(value) + 1;\n            string memory buffer = new string(length);\n            uint256 ptr;\n            /// @solidity memory-safe-assembly\n            assembly {\n                ptr := add(buffer, add(32, length))\n            }\n            while (true) {\n                ptr--;\n                /// @solidity memory-safe-assembly\n                assembly {\n                    mstore8(ptr, byte(mod(value, 10), HEX_DIGITS))\n                }\n                value /= 10;\n                if (value == 0) break;\n            }\n            return buffer;\n        }\n    }\n\n    /**\n     * @dev Converts a `int256` to its ASCII `string` decimal representation.\n     */\n    function toStringSigned(int256 value) internal pure returns (string memory) {\n        return string.concat(value < 0 ? \"-\" : \"\", toString(SignedMath.abs(value)));\n    }\n\n    /**\n     * @dev Converts a `uint256` to its ASCII `string` hexadecimal representation.\n     */\n    function toHexString(uint256 value) internal pure returns (string memory) {\n        unchecked {\n            return toHexString(value, Math.log256(value) + 1);\n        }\n    }\n\n    /**\n     * @dev Converts a `uint256` to its ASCII `string` hexadecimal representation with fixed length.\n     */\n    function toHexString(uint256 value, uint256 length) internal pure returns (string memory) {\n        uint256 localValue = value;\n        bytes memory buffer = new bytes(2 * length + 2);\n        buffer[0] = \"0\";\n        buffer[1] = \"x\";\n        for (uint256 i = 2 * length + 1; i > 1; --i) {\n            buffer[i] = HEX_DIGITS[localValue & 0xf];\n            localValue >>= 4;\n        }\n        if (localValue != 0) {\n            revert StringsInsufficientHexLength(value, length);\n        }\n        return string(buffer);\n    }\n\n    /**\n     * @dev Converts an `address` with fixed length of 20 bytes to its not checksummed ASCII `string` hexadecimal\n     * representation.\n     */\n    function toHexString(address addr) internal pure returns (string memory) {\n        return toHexString(uint256(uint160(addr)), ADDRESS_LENGTH);\n    }\n\n    /**\n     * @dev Returns true if the two strings are equal.\n     */\n    function equal(string memory a, string memory b) internal pure returns (bool) {\n        return bytes(a).length == bytes(b).length && keccak256(bytes(a)) == keccak256(bytes(b));\n    }\n}\n"
@@ -1173,28 +1173,31 @@
 				"Utils": {
 					"abi": [],
 					"devdoc": {
+						"author": "Fabian Diemand",
+						"custom:educational": "This library is intended only as an educational piece of work. No productive use is intended.",
 						"kind": "dev",
 						"methods": {},
+						"title": "An library for utility functions of the solar insurance contract",
 						"version": 1
 					},
 					"evm": {
-						"assembly": "    /* \"libraries/Utils.sol\":115:303  library Utils {... */\n  dataSize(sub_0)\n  dataOffset(sub_0)\n  0x0b\n  dup3\n  dup3\n  dup3\n  codecopy\n  dup1\n  mload\n  0x00\n  byte\n  0x73\n  eq\n  tag_1\n  jumpi\n  mstore(0x00, 0x4e487b7100000000000000000000000000000000000000000000000000000000)\n  mstore(0x04, 0x00)\n  revert(0x00, 0x24)\ntag_1:\n  mstore(0x00, address)\n  0x73\n  dup2\n  mstore8\n  dup3\n  dup2\n  return\nstop\n\nsub_0: assembly {\n        /* \"libraries/Utils.sol\":115:303  library Utils {... */\n      eq(address, deployTimeAddress())\n      mstore(0x40, 0x80)\n      0x00\n      dup1\n      revert\n\n    auxdata: 0xa26469706673582212209426c0b91b05b594fd734815884b4d5966ab826606cbfc35cf6a9e5865cfa7f264736f6c63430008160033\n}\n",
+						"assembly": "    /* \"libraries/Utils.sol\":407:834  library Utils {... */\n  dataSize(sub_0)\n  dataOffset(sub_0)\n  0x0b\n  dup3\n  dup3\n  dup3\n  codecopy\n  dup1\n  mload\n  0x00\n  byte\n  0x73\n  eq\n  tag_1\n  jumpi\n  mstore(0x00, 0x4e487b7100000000000000000000000000000000000000000000000000000000)\n  mstore(0x04, 0x00)\n  revert(0x00, 0x24)\ntag_1:\n  mstore(0x00, address)\n  0x73\n  dup2\n  mstore8\n  dup3\n  dup2\n  return\nstop\n\nsub_0: assembly {\n        /* \"libraries/Utils.sol\":407:834  library Utils {... */\n      eq(address, deployTimeAddress())\n      mstore(0x40, 0x80)\n      0x00\n      dup1\n      revert\n\n    auxdata: 0xa26469706673582212200085d762d8efe52bffc65ca71d2211079516bd94c17fd999e19ceab0d817f9a864736f6c63430008160033\n}\n",
 						"bytecode": {
 							"functionDebugData": {},
 							"generatedSources": [],
 							"linkReferences": {},
-							"object": "6055604b600b8282823980515f1a607314603f577f4e487b71000000000000000000000000000000000000000000000000000000005f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f80fdfea26469706673582212209426c0b91b05b594fd734815884b4d5966ab826606cbfc35cf6a9e5865cfa7f264736f6c63430008160033",
-							"opcodes": "PUSH1 0x55 PUSH1 0x4B PUSH1 0xB DUP3 DUP3 DUP3 CODECOPY DUP1 MLOAD PUSH0 BYTE PUSH1 0x73 EQ PUSH1 0x3F JUMPI PUSH32 0x4E487B7100000000000000000000000000000000000000000000000000000000 PUSH0 MSTORE PUSH0 PUSH1 0x4 MSTORE PUSH1 0x24 PUSH0 REVERT JUMPDEST ADDRESS PUSH0 MSTORE PUSH1 0x73 DUP2 MSTORE8 DUP3 DUP2 RETURN INVALID PUSH20 0x0 ADDRESS EQ PUSH1 0x80 PUSH1 0x40 MSTORE PUSH0 DUP1 REVERT INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 SWAP5 0x26 0xC0 0xB9 SHL SDIV 0xB5 SWAP5 REVERT PUSH20 0x4815884B4D5966AB826606CBFC35CF6A9E5865CF 0xA7 CALLCODE PUSH5 0x736F6C6343 STOP ADDMOD AND STOP CALLER ",
-							"sourceMap": "115:188:3:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;"
+							"object": "6055604b600b8282823980515f1a607314603f577f4e487b71000000000000000000000000000000000000000000000000000000005f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f80fdfea26469706673582212200085d762d8efe52bffc65ca71d2211079516bd94c17fd999e19ceab0d817f9a864736f6c63430008160033",
+							"opcodes": "PUSH1 0x55 PUSH1 0x4B PUSH1 0xB DUP3 DUP3 DUP3 CODECOPY DUP1 MLOAD PUSH0 BYTE PUSH1 0x73 EQ PUSH1 0x3F JUMPI PUSH32 0x4E487B7100000000000000000000000000000000000000000000000000000000 PUSH0 MSTORE PUSH0 PUSH1 0x4 MSTORE PUSH1 0x24 PUSH0 REVERT JUMPDEST ADDRESS PUSH0 MSTORE PUSH1 0x73 DUP2 MSTORE8 DUP3 DUP2 RETURN INVALID PUSH20 0x0 ADDRESS EQ PUSH1 0x80 PUSH1 0x40 MSTORE PUSH0 DUP1 REVERT INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 STOP DUP6 0xD7 PUSH3 0xD8EFE5 0x2B SELFDESTRUCT 0xC6 0x5C 0xA7 SAR 0x22 GT SMOD SWAP6 AND 0xBD SWAP5 0xC1 PUSH32 0xD999E19CEAB0D817F9A864736F6C634300081600330000000000000000000000 ",
+							"sourceMap": "407:427:3:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;"
 						},
 						"deployedBytecode": {
 							"functionDebugData": {},
 							"generatedSources": [],
 							"immutableReferences": {},
 							"linkReferences": {},
-							"object": "730000000000000000000000000000000000000000301460806040525f80fdfea26469706673582212209426c0b91b05b594fd734815884b4d5966ab826606cbfc35cf6a9e5865cfa7f264736f6c63430008160033",
-							"opcodes": "PUSH20 0x0 ADDRESS EQ PUSH1 0x80 PUSH1 0x40 MSTORE PUSH0 DUP1 REVERT INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 SWAP5 0x26 0xC0 0xB9 SHL SDIV 0xB5 SWAP5 REVERT PUSH20 0x4815884B4D5966AB826606CBFC35CF6A9E5865CF 0xA7 CALLCODE PUSH5 0x736F6C6343 STOP ADDMOD AND STOP CALLER ",
-							"sourceMap": "115:188:3:-:0;;;;;;;;"
+							"object": "730000000000000000000000000000000000000000301460806040525f80fdfea26469706673582212200085d762d8efe52bffc65ca71d2211079516bd94c17fd999e19ceab0d817f9a864736f6c63430008160033",
+							"opcodes": "PUSH20 0x0 ADDRESS EQ PUSH1 0x80 PUSH1 0x40 MSTORE PUSH0 DUP1 REVERT INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 STOP DUP6 0xD7 PUSH3 0xD8EFE5 0x2B SELFDESTRUCT 0xC6 0x5C 0xA7 SAR 0x22 GT SMOD SWAP6 AND 0xBD SWAP5 0xC1 PUSH32 0xD999E19CEAB0D817F9A864736F6C634300081600330000000000000000000000 ",
+							"sourceMap": "407:427:3:-:0;;;;;;;;"
 						},
 						"gasEstimates": {
 							"creation": {
@@ -1209,289 +1212,289 @@
 						"legacyAssembly": {
 							".code": [
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "PUSH #[$]",
 									"source": 3,
 									"value": "0000000000000000000000000000000000000000000000000000000000000000"
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "PUSH [$]",
 									"source": 3,
 									"value": "0000000000000000000000000000000000000000000000000000000000000000"
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "PUSH",
 									"source": 3,
 									"value": "B"
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "DUP3",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "DUP3",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "DUP3",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "CODECOPY",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "DUP1",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "MLOAD",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "PUSH",
 									"source": 3,
 									"value": "0"
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "BYTE",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "PUSH",
 									"source": 3,
 									"value": "73"
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "EQ",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "PUSH [tag]",
 									"source": 3,
 									"value": "1"
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "JUMPI",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "PUSH",
 									"source": 3,
 									"value": "4E487B7100000000000000000000000000000000000000000000000000000000"
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "PUSH",
 									"source": 3,
 									"value": "0"
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "MSTORE",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "PUSH",
 									"source": 3,
 									"value": "0"
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "PUSH",
 									"source": 3,
 									"value": "4"
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "MSTORE",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "PUSH",
 									"source": 3,
 									"value": "24"
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "PUSH",
 									"source": 3,
 									"value": "0"
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "REVERT",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "tag",
 									"source": 3,
 									"value": "1"
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "JUMPDEST",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "ADDRESS",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "PUSH",
 									"source": 3,
 									"value": "0"
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "MSTORE",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "PUSH",
 									"source": 3,
 									"value": "73"
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "DUP2",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "MSTORE8",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "DUP3",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "DUP2",
 									"source": 3
 								},
 								{
-									"begin": 115,
-									"end": 303,
+									"begin": 407,
+									"end": 834,
 									"name": "RETURN",
 									"source": 3
 								}
 							],
 							".data": {
 								"0": {
-									".auxdata": "a26469706673582212209426c0b91b05b594fd734815884b4d5966ab826606cbfc35cf6a9e5865cfa7f264736f6c63430008160033",
+									".auxdata": "a26469706673582212200085d762d8efe52bffc65ca71d2211079516bd94c17fd999e19ceab0d817f9a864736f6c63430008160033",
 									".code": [
 										{
-											"begin": 115,
-											"end": 303,
+											"begin": 407,
+											"end": 834,
 											"name": "PUSHDEPLOYADDRESS",
 											"source": 3
 										},
 										{
-											"begin": 115,
-											"end": 303,
+											"begin": 407,
+											"end": 834,
 											"name": "ADDRESS",
 											"source": 3
 										},
 										{
-											"begin": 115,
-											"end": 303,
+											"begin": 407,
+											"end": 834,
 											"name": "EQ",
 											"source": 3
 										},
 										{
-											"begin": 115,
-											"end": 303,
+											"begin": 407,
+											"end": 834,
 											"name": "PUSH",
 											"source": 3,
 											"value": "80"
 										},
 										{
-											"begin": 115,
-											"end": 303,
+											"begin": 407,
+											"end": 834,
 											"name": "PUSH",
 											"source": 3,
 											"value": "40"
 										},
 										{
-											"begin": 115,
-											"end": 303,
+											"begin": 407,
+											"end": 834,
 											"name": "MSTORE",
 											"source": 3
 										},
 										{
-											"begin": 115,
-											"end": 303,
+											"begin": 407,
+											"end": 834,
 											"name": "PUSH",
 											"source": 3,
 											"value": "0"
 										},
 										{
-											"begin": 115,
-											"end": 303,
+											"begin": 407,
+											"end": 834,
 											"name": "DUP1",
 											"source": 3
 										},
 										{
-											"begin": 115,
-											"end": 303,
+											"begin": 407,
+											"end": 834,
 											"name": "REVERT",
 											"source": 3
 										}
@@ -1508,7 +1511,7 @@
 						},
 						"methodIdentifiers": {}
 					},
-					"metadata": "{\"compiler\":{\"version\":\"0.8.22+commit.4fc1097e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"libraries/Utils.sol\":\"Utils\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/utils/Strings.sol\":{\"keccak256\":\"0x55f102ea785d8399c0e58d1108e2d289506dde18abc6db1b7f68c1f9f9bc5792\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6e52e0a7765c943ef14e5bcf11e46e6139fa044be564881378349236bf2e3453\",\"dweb:/ipfs/QmZEeeXoFPW47amyP35gfzomF9DixqqTEPwzBakv6cZw6i\"]},\"@openzeppelin/contracts/utils/math/Math.sol\":{\"keccak256\":\"0x005ec64c6313f0555d59e278f9a7a5ab2db5bdc72a027f255a37c327af1ec02d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4ece9f0b9c8daca08c76b6b5405a6446b6f73b3a15fab7ff56e296cbd4a2c875\",\"dweb:/ipfs/QmQyRpyPRL5SQuAgj6SHmbir3foX65FJjbVTTQrA2EFg6L\"]},\"@openzeppelin/contracts/utils/math/SignedMath.sol\":{\"keccak256\":\"0x5f7e4076e175393767754387c962926577f1660dd9b810187b9002407656be72\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7d533a1c97cd43a57cd9c465f7ee8dd0e39ae93a8fb8ff8e5303a356b081cdcc\",\"dweb:/ipfs/QmVBEei6aTnvYNZp2CHYVNKyZS4q1KkjANfY39WVXZXVoT\"]},\"libraries/Utils.sol\":{\"keccak256\":\"0x8ebe433afb49d89781b3c552014bcc90f5097abfdbfdaa8615ac5337921e8a0c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8ce56b3a63bcf888ae437bee09fc933cb08347a6e0637f7389ddb0afee631586\",\"dweb:/ipfs/QmUFn8RDQMZ3yfVLyp1stw8mAquzmpbSnP3vEJrBKwYa3t\"]}},\"version\":1}",
+					"metadata": "{\"compiler\":{\"version\":\"0.8.22+commit.4fc1097e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"author\":\"Fabian Diemand\",\"custom:educational\":\"This library is intended only as an educational piece of work. No productive use is intended.\",\"kind\":\"dev\",\"methods\":{},\"title\":\"An library for utility functions of the solar insurance contract\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"notice\":\"The library contains several utility functions.\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"libraries/Utils.sol\":\"Utils\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/utils/Strings.sol\":{\"keccak256\":\"0x55f102ea785d8399c0e58d1108e2d289506dde18abc6db1b7f68c1f9f9bc5792\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6e52e0a7765c943ef14e5bcf11e46e6139fa044be564881378349236bf2e3453\",\"dweb:/ipfs/QmZEeeXoFPW47amyP35gfzomF9DixqqTEPwzBakv6cZw6i\"]},\"@openzeppelin/contracts/utils/math/Math.sol\":{\"keccak256\":\"0x005ec64c6313f0555d59e278f9a7a5ab2db5bdc72a027f255a37c327af1ec02d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4ece9f0b9c8daca08c76b6b5405a6446b6f73b3a15fab7ff56e296cbd4a2c875\",\"dweb:/ipfs/QmQyRpyPRL5SQuAgj6SHmbir3foX65FJjbVTTQrA2EFg6L\"]},\"@openzeppelin/contracts/utils/math/SignedMath.sol\":{\"keccak256\":\"0x5f7e4076e175393767754387c962926577f1660dd9b810187b9002407656be72\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7d533a1c97cd43a57cd9c465f7ee8dd0e39ae93a8fb8ff8e5303a356b081cdcc\",\"dweb:/ipfs/QmVBEei6aTnvYNZp2CHYVNKyZS4q1KkjANfY39WVXZXVoT\"]},\"libraries/Utils.sol\":{\"keccak256\":\"0x657703c3fd1f576bd93113a4c19e9f6c2fb4af0db8cccce311f4cadb0c236653\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://03ecf85368d73bb75b1eb2f46335fd9e34db88703b0c0a43d4844524d10819aa\",\"dweb:/ipfs/QmXfZcChjiJ6sAdoPQvFKyxKog1gJ3qnUViF1dXHTq5Fs6\"]}},\"version\":1}",
 					"storageLayout": {
 						"storage": [],
 						"types": null
@@ -1516,6 +1519,7 @@
 					"userdoc": {
 						"kind": "user",
 						"methods": {},
+						"notice": "The library contains several utility functions.",
 						"version": 1
 					}
 				}
@@ -20310,10 +20314,10 @@
 							254
 						],
 						"Utils": [
-							1437
+							1439
 						]
 					},
-					"id": 1438,
+					"id": 1440,
 					"license": "MIT",
 					"nodeType": "SourceUnit",
 					"nodes": [
@@ -20333,7 +20337,7 @@
 							"id": 1416,
 							"nameLocation": "-1:-1:-1",
 							"nodeType": "ImportDirective",
-							"scope": 1438,
+							"scope": 1440,
 							"sourceUnit": 255,
 							"src": "60:51:3",
 							"symbolAliases": [],
@@ -20345,20 +20349,26 @@
 							"canonicalName": "Utils",
 							"contractDependencies": [],
 							"contractKind": "library",
+							"documentation": {
+								"id": 1417,
+								"nodeType": "StructuredDocumentation",
+								"src": "115:290:3",
+								"text": " @title An library for utility functions of the solar insurance contract\n @author Fabian Diemand\n @notice The library contains several utility functions.\n @custom:educational This library is intended only as an educational piece of work. No productive use is intended."
+							},
 							"fullyImplemented": true,
-							"id": 1437,
+							"id": 1439,
 							"linearizedBaseContracts": [
-								1437
+								1439
 							],
 							"name": "Utils",
-							"nameLocation": "123:5:3",
+							"nameLocation": "415:5:3",
 							"nodeType": "ContractDefinition",
 							"nodes": [
 								{
 									"body": {
-										"id": 1435,
+										"id": 1437,
 										"nodeType": "Block",
-										"src": "229:71:3",
+										"src": "760:71:3",
 										"statements": [
 											{
 												"expression": {
@@ -20366,12 +20376,12 @@
 														{
 															"arguments": [
 																{
-																	"id": 1430,
+																	"id": 1432,
 																	"name": "year",
 																	"nodeType": "Identifier",
 																	"overloadedDeclarations": [],
-																	"referencedDeclaration": 1418,
-																	"src": "278:4:3",
+																	"referencedDeclaration": 1420,
+																	"src": "809:4:3",
 																	"typeDescriptions": {
 																		"typeIdentifier": "t_uint256",
 																		"typeString": "uint256"
@@ -20386,33 +20396,33 @@
 																	}
 																],
 																"expression": {
-																	"id": 1428,
+																	"id": 1430,
 																	"name": "Strings",
 																	"nodeType": "Identifier",
 																	"overloadedDeclarations": [],
 																	"referencedDeclaration": 254,
-																	"src": "261:7:3",
+																	"src": "792:7:3",
 																	"typeDescriptions": {
 																		"typeIdentifier": "t_type$_t_contract$_Strings_$254_$",
 																		"typeString": "type(library Strings)"
 																	}
 																},
-																"id": 1429,
+																"id": 1431,
 																"isConstant": false,
 																"isLValue": false,
 																"isPure": false,
 																"lValueRequested": false,
-																"memberLocation": "269:8:3",
+																"memberLocation": "800:8:3",
 																"memberName": "toString",
 																"nodeType": "MemberAccess",
 																"referencedDeclaration": 67,
-																"src": "261:16:3",
+																"src": "792:16:3",
 																"typeDescriptions": {
 																	"typeIdentifier": "t_function_internal_pure$_t_uint256_$returns$_t_string_memory_ptr_$",
 																	"typeString": "function (uint256) pure returns (string memory)"
 																}
 															},
-															"id": 1431,
+															"id": 1433,
 															"isConstant": false,
 															"isLValue": false,
 															"isPure": false,
@@ -20421,7 +20431,7 @@
 															"nameLocations": [],
 															"names": [],
 															"nodeType": "FunctionCall",
-															"src": "261:22:3",
+															"src": "792:22:3",
 															"tryCall": false,
 															"typeDescriptions": {
 																"typeIdentifier": "t_string_memory_ptr",
@@ -20429,12 +20439,12 @@
 															}
 														},
 														{
-															"id": 1432,
+															"id": 1434,
 															"name": "region",
 															"nodeType": "Identifier",
 															"overloadedDeclarations": [],
-															"referencedDeclaration": 1420,
-															"src": "285:6:3",
+															"referencedDeclaration": 1422,
+															"src": "816:6:3",
 															"typeDescriptions": {
 																"typeIdentifier": "t_string_memory_ptr",
 																"typeString": "string memory"
@@ -20453,40 +20463,40 @@
 															}
 														],
 														"expression": {
-															"id": 1426,
+															"id": 1428,
 															"isConstant": false,
 															"isLValue": false,
 															"isPure": true,
 															"lValueRequested": false,
 															"nodeType": "ElementaryTypeNameExpression",
-															"src": "247:6:3",
+															"src": "778:6:3",
 															"typeDescriptions": {
 																"typeIdentifier": "t_type$_t_string_storage_ptr_$",
 																"typeString": "type(string storage pointer)"
 															},
 															"typeName": {
-																"id": 1425,
+																"id": 1427,
 																"name": "string",
 																"nodeType": "ElementaryTypeName",
-																"src": "247:6:3",
+																"src": "778:6:3",
 																"typeDescriptions": {}
 															}
 														},
-														"id": 1427,
+														"id": 1429,
 														"isConstant": false,
 														"isLValue": false,
 														"isPure": false,
 														"lValueRequested": false,
-														"memberLocation": "254:6:3",
+														"memberLocation": "785:6:3",
 														"memberName": "concat",
 														"nodeType": "MemberAccess",
-														"src": "247:13:3",
+														"src": "778:13:3",
 														"typeDescriptions": {
 															"typeIdentifier": "t_function_stringconcat_pure$__$returns$_t_string_memory_ptr_$",
 															"typeString": "function () pure returns (string memory)"
 														}
 													},
-													"id": 1433,
+													"id": 1435,
 													"isConstant": false,
 													"isLValue": false,
 													"isPure": false,
@@ -20495,40 +20505,46 @@
 													"nameLocations": [],
 													"names": [],
 													"nodeType": "FunctionCall",
-													"src": "247:45:3",
+													"src": "778:45:3",
 													"tryCall": false,
 													"typeDescriptions": {
 														"typeIdentifier": "t_string_memory_ptr",
 														"typeString": "string memory"
 													}
 												},
-												"functionReturnParameters": 1424,
-												"id": 1434,
+												"functionReturnParameters": 1426,
+												"id": 1436,
 												"nodeType": "Return",
-												"src": "240:52:3"
+												"src": "771:52:3"
 											}
 										]
 									},
-									"id": 1436,
+									"documentation": {
+										"id": 1418,
+										"nodeType": "StructuredDocumentation",
+										"src": "434:227:3",
+										"text": " @dev Concatenates the year and region to generate a sunshine record ID.\n @param year The year for the record.\n @param region The region for the record.\n @return The generated record ID."
+									},
+									"id": 1438,
 									"implemented": true,
 									"kind": "function",
 									"modifiers": [],
 									"name": "getRecordId",
-									"nameLocation": "145:11:3",
+									"nameLocation": "676:11:3",
 									"nodeType": "FunctionDefinition",
 									"parameters": {
-										"id": 1421,
+										"id": 1423,
 										"nodeType": "ParameterList",
 										"parameters": [
 											{
 												"constant": false,
-												"id": 1418,
+												"id": 1420,
 												"mutability": "mutable",
 												"name": "year",
-												"nameLocation": "165:4:3",
+												"nameLocation": "696:4:3",
 												"nodeType": "VariableDeclaration",
-												"scope": 1436,
-												"src": "157:12:3",
+												"scope": 1438,
+												"src": "688:12:3",
 												"stateVariable": false,
 												"storageLocation": "default",
 												"typeDescriptions": {
@@ -20536,10 +20552,10 @@
 													"typeString": "uint256"
 												},
 												"typeName": {
-													"id": 1417,
+													"id": 1419,
 													"name": "uint256",
 													"nodeType": "ElementaryTypeName",
-													"src": "157:7:3",
+													"src": "688:7:3",
 													"typeDescriptions": {
 														"typeIdentifier": "t_uint256",
 														"typeString": "uint256"
@@ -20549,13 +20565,13 @@
 											},
 											{
 												"constant": false,
-												"id": 1420,
+												"id": 1422,
 												"mutability": "mutable",
 												"name": "region",
-												"nameLocation": "185:6:3",
+												"nameLocation": "716:6:3",
 												"nodeType": "VariableDeclaration",
-												"scope": 1436,
-												"src": "171:20:3",
+												"scope": 1438,
+												"src": "702:20:3",
 												"stateVariable": false,
 												"storageLocation": "memory",
 												"typeDescriptions": {
@@ -20563,10 +20579,10 @@
 													"typeString": "string"
 												},
 												"typeName": {
-													"id": 1419,
+													"id": 1421,
 													"name": "string",
 													"nodeType": "ElementaryTypeName",
-													"src": "171:6:3",
+													"src": "702:6:3",
 													"typeDescriptions": {
 														"typeIdentifier": "t_string_storage_ptr",
 														"typeString": "string"
@@ -20575,21 +20591,21 @@
 												"visibility": "internal"
 											}
 										],
-										"src": "156:36:3"
+										"src": "687:36:3"
 									},
 									"returnParameters": {
-										"id": 1424,
+										"id": 1426,
 										"nodeType": "ParameterList",
 										"parameters": [
 											{
 												"constant": false,
-												"id": 1423,
+												"id": 1425,
 												"mutability": "mutable",
 												"name": "",
 												"nameLocation": "-1:-1:-1",
 												"nodeType": "VariableDeclaration",
-												"scope": 1436,
-												"src": "215:13:3",
+												"scope": 1438,
+												"src": "746:13:3",
 												"stateVariable": false,
 												"storageLocation": "memory",
 												"typeDescriptions": {
@@ -20597,10 +20613,10 @@
 													"typeString": "string"
 												},
 												"typeName": {
-													"id": 1422,
+													"id": 1424,
 													"name": "string",
 													"nodeType": "ElementaryTypeName",
-													"src": "215:6:3",
+													"src": "746:6:3",
 													"typeDescriptions": {
 														"typeIdentifier": "t_string_storage_ptr",
 														"typeString": "string"
@@ -20609,22 +20625,22 @@
 												"visibility": "internal"
 											}
 										],
-										"src": "214:15:3"
+										"src": "745:15:3"
 									},
-									"scope": 1437,
-									"src": "136:164:3",
+									"scope": 1439,
+									"src": "667:164:3",
 									"stateMutability": "pure",
 									"virtual": false,
 									"visibility": "internal"
 								}
 							],
-							"scope": 1438,
-							"src": "115:188:3",
+							"scope": 1440,
+							"src": "407:427:3",
 							"usedErrors": [],
 							"usedEvents": []
 						}
 					],
-					"src": "33:270:3"
+					"src": "33:801:3"
 				},
 				"id": 3
 			}

@@ -1,13 +1,13 @@
 {
-	"id": "9c00cc073388948b39d9efcc3e207e74",
+	"id": "bc991ddfaea8dda73af480e4ee0c7084",
 	"_format": "hh-sol-build-info-1",
 	"solcVersion": "0.8.22",
 	"solcLongVersion": "0.8.22+commit.4fc1097e",
 	"input": {
 		"language": "Solidity",
 		"sources": {
-			"libraries/Demoable.sol": {
-				"content": "// SPDX-License-Identifier: MIT\r\npragma solidity 0.8.22;\r\n\r\n\r\nabstract contract Demoable{\r\n\r\n    constructor() {}\r\n\r\n    /*\r\n    * @dev Load contract with some eth to be able to payout claims.\r\n    * @param _value The amount of eth to be loaded into the contract.\r\n    * @notice This function is used to fund the contract with some ether for demonstration purposes.\r\n    *         It requires the caller to provide a non-zero amount of ether as the `_value` parameter.\r\n    *         If the `_value` is provided as zero, the function will revert the transaction.\r\n    */\r\n    function fundContract() public payable requireNonZeroValue {\r\n    }\r\n\r\n    modifier requireNonZeroValue {\r\n        require(msg.value > 0, \"Cannot load the contract with 0\");\r\n        _;\r\n    }\r\n}"
+			"libraries/Fundable.sol": {
+				"content": "// SPDX-License-Identifier: MIT\r\npragma solidity 0.8.22;\r\n\r\n/**\r\n* @title An abstract contract for contract funding\r\n* @author Fabian Diemand\r\n*\r\n* @notice The abstract contract is intended to fund other contracts (e.g. for demo purposes).\r\n*\r\n* @custom:educational This contract is intended only as an educational piece of work. No productive use is intended.\r\n*/\r\nabstract contract Fundable{\r\n\r\n    constructor() {}\r\n\r\n    /*\r\n    * @notice Load contract with some eth to be able to payout claims.\r\n    * @param _value The amount of eth to be loaded into the contract.\r\n    * @dev This function is used to fund the contract with some ether for demonstration purposes.\r\n    * @dev It requires the caller to provide a non-zero amount of ether as the `_value` parameter.\r\n    * @dev If the `_value` is provided as zero, the function will revert the transaction.\r\n    */\r\n    function fundContract() public payable requireNonZeroValue {\r\n    }\r\n\r\n    /**\r\n     * @dev Modifier to require value of a message being positive (DRY)\r\n     * \r\n     * @dev Requirements:\r\n     * @dev - The value sent with the message must be greater than zero\r\n     */\r\n    modifier requireNonZeroValue {\r\n        require(msg.value > 0, \"Cannot load the contract with 0\");\r\n        _;\r\n    }\r\n}"
 			}
 		},
 		"settings": {
@@ -40,8 +40,8 @@
 	},
 	"output": {
 		"contracts": {
-			"libraries/Demoable.sol": {
-				"Demoable": {
+			"libraries/Fundable.sol": {
+				"Fundable": {
 					"abi": [
 						{
 							"inputs": [],
@@ -52,8 +52,11 @@
 						}
 					],
 					"devdoc": {
+						"author": "Fabian Diemand",
+						"custom:educational": "This contract is intended only as an educational piece of work. No productive use is intended.",
 						"kind": "dev",
 						"methods": {},
+						"title": "An abstract contract for contract funding",
 						"version": 1
 					},
 					"evm": {
@@ -81,7 +84,7 @@
 							"fundContract()": "bd097e21"
 						}
 					},
-					"metadata": "{\"compiler\":{\"version\":\"0.8.22+commit.4fc1097e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"fundContract\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"libraries/Demoable.sol\":\"Demoable\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"libraries/Demoable.sol\":{\"keccak256\":\"0xc72b01e2b05bb4a9c603844d7b7a4323973552c36067a5983e103b8dc929fa1e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f0a470acf50901e6878028ba2a4e85fb98ed93a06310500ada5220c2dc71a77e\",\"dweb:/ipfs/QmfXQ2mNa1TUMfRuCVarTfPfS34xMrUvarMMtmTiTikB8w\"]}},\"version\":1}",
+					"metadata": "{\"compiler\":{\"version\":\"0.8.22+commit.4fc1097e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"fundContract\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Fabian Diemand\",\"custom:educational\":\"This contract is intended only as an educational piece of work. No productive use is intended.\",\"kind\":\"dev\",\"methods\":{},\"title\":\"An abstract contract for contract funding\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"notice\":\"The abstract contract is intended to fund other contracts (e.g. for demo purposes).\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"libraries/Fundable.sol\":\"Fundable\"},\"evmVersion\":\"shanghai\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"libraries/Fundable.sol\":{\"keccak256\":\"0x96e2d606b140477909443ea5860dfcd85bec648108c45e08d8fc48676a10574f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6900e56d50b00348b2c851248884c27d09e6e6d18e15b84285b59db71bfb57b5\",\"dweb:/ipfs/QmQULAtsoF5jsvw4iRMMfVFpGKjug78yZX6xRe3LkX985N\"]}},\"version\":1}",
 					"storageLayout": {
 						"storage": [],
 						"types": null
@@ -89,21 +92,22 @@
 					"userdoc": {
 						"kind": "user",
 						"methods": {},
+						"notice": "The abstract contract is intended to fund other contracts (e.g. for demo purposes).",
 						"version": 1
 					}
 				}
 			}
 		},
 		"sources": {
-			"libraries/Demoable.sol": {
+			"libraries/Fundable.sol": {
 				"ast": {
-					"absolutePath": "libraries/Demoable.sol",
+					"absolutePath": "libraries/Fundable.sol",
 					"exportedSymbols": {
-						"Demoable": [
-							24
+						"Fundable": [
+							26
 						]
 					},
-					"id": 25,
+					"id": 27,
 					"license": "MIT",
 					"nodeType": "SourceUnit",
 					"nodes": [
@@ -120,26 +124,32 @@
 						{
 							"abstract": true,
 							"baseContracts": [],
-							"canonicalName": "Demoable",
+							"canonicalName": "Fundable",
 							"contractDependencies": [],
 							"contractKind": "contract",
+							"documentation": {
+								"id": 2,
+								"nodeType": "StructuredDocumentation",
+								"src": "60:304:0",
+								"text": " @title An abstract contract for contract funding\n @author Fabian Diemand\n @notice The abstract contract is intended to fund other contracts (e.g. for demo purposes).\n @custom:educational This contract is intended only as an educational piece of work. No productive use is intended."
+							},
 							"fullyImplemented": true,
-							"id": 24,
+							"id": 26,
 							"linearizedBaseContracts": [
-								24
+								26
 							],
-							"name": "Demoable",
-							"nameLocation": "80:8:0",
+							"name": "Fundable",
+							"nameLocation": "384:8:0",
 							"nodeType": "ContractDefinition",
 							"nodes": [
 								{
 									"body": {
-										"id": 4,
+										"id": 5,
 										"nodeType": "Block",
-										"src": "111:2:0",
+										"src": "415:2:0",
 										"statements": []
 									},
-									"id": 5,
+									"id": 6,
 									"implemented": true,
 									"kind": "constructor",
 									"modifiers": [],
@@ -147,78 +157,78 @@
 									"nameLocation": "-1:-1:-1",
 									"nodeType": "FunctionDefinition",
 									"parameters": {
-										"id": 2,
-										"nodeType": "ParameterList",
-										"parameters": [],
-										"src": "108:2:0"
-									},
-									"returnParameters": {
 										"id": 3,
 										"nodeType": "ParameterList",
 										"parameters": [],
-										"src": "111:0:0"
+										"src": "412:2:0"
 									},
-									"scope": 24,
-									"src": "97:16:0",
+									"returnParameters": {
+										"id": 4,
+										"nodeType": "ParameterList",
+										"parameters": [],
+										"src": "415:0:0"
+									},
+									"scope": 26,
+									"src": "401:16:0",
 									"stateMutability": "nonpayable",
 									"virtual": false,
 									"visibility": "internal"
 								},
 								{
 									"body": {
-										"id": 10,
+										"id": 11,
 										"nodeType": "Block",
-										"src": "635:8:0",
+										"src": "933:8:0",
 										"statements": []
 									},
 									"functionSelector": "bd097e21",
-									"id": 11,
+									"id": 12,
 									"implemented": true,
 									"kind": "function",
 									"modifiers": [
 										{
-											"id": 8,
+											"id": 9,
 											"kind": "modifierInvocation",
 											"modifierName": {
-												"id": 7,
+												"id": 8,
 												"name": "requireNonZeroValue",
 												"nameLocations": [
-													"615:19:0"
+													"913:19:0"
 												],
 												"nodeType": "IdentifierPath",
-												"referencedDeclaration": 23,
-												"src": "615:19:0"
+												"referencedDeclaration": 25,
+												"src": "913:19:0"
 											},
 											"nodeType": "ModifierInvocation",
-											"src": "615:19:0"
+											"src": "913:19:0"
 										}
 									],
 									"name": "fundContract",
-									"nameLocation": "585:12:0",
+									"nameLocation": "883:12:0",
 									"nodeType": "FunctionDefinition",
 									"parameters": {
-										"id": 6,
+										"id": 7,
 										"nodeType": "ParameterList",
 										"parameters": [],
-										"src": "597:2:0"
+										"src": "895:2:0"
 									},
 									"returnParameters": {
-										"id": 9,
+										"id": 10,
 										"nodeType": "ParameterList",
 										"parameters": [],
-										"src": "635:0:0"
+										"src": "933:0:0"
 									},
-									"scope": 24,
-									"src": "576:67:0",
+									"scope": 26,
+									"src": "874:67:0",
 									"stateMutability": "payable",
 									"virtual": false,
 									"visibility": "public"
 								},
 								{
 									"body": {
-										"id": 22,
+										"id": 24,
 										"nodeType": "Block",
-										"src": "680:88:0",
+										"src": "1178:88:0",
 										"statements": [
 											{
 												"expression": {
@@ -228,33 +238,33 @@
 																"typeIdentifier": "t_uint256",
 																"typeString": "uint256"
 															},
-															"id": 17,
+															"id": 19,
 															"isConstant": false,
 															"isLValue": false,
 															"isPure": false,
 															"lValueRequested": false,
 															"leftExpression": {
 																"expression": {
-																	"id": 14,
+																	"id": 16,
 																	"name": "msg",
 																	"nodeType": "Identifier",
 																	"overloadedDeclarations": [],
 																	"referencedDeclaration": 4294967281,
-																	"src": "699:3:0",
+																	"src": "1197:3:0",
 																	"typeDescriptions": {
 																		"typeIdentifier": "t_magic_message",
 																		"typeString": "msg"
 																	}
 																},
-																"id": 15,
+																"id": 17,
 																"isConstant": false,
 																"isLValue": false,
 																"isPure": false,
 																"lValueRequested": false,
-																"memberLocation": "703:5:0",
+																"memberLocation": "1201:5:0",
 																"memberName": "value",
 																"nodeType": "MemberAccess",
-																"src": "699:9:0",
+																"src": "1197:9:0",
 																"typeDescriptions": {
 																	"typeIdentifier": "t_uint256",
 																	"typeString": "uint256"
@@ -264,21 +274,21 @@
 															"operator": ">",
 															"rightExpression": {
 																"hexValue": "30",
-																"id": 16,
+																"id": 18,
 																"isConstant": false,
 																"isLValue": false,
 																"isPure": true,
 																"kind": "number",
 																"lValueRequested": false,
 																"nodeType": "Literal",
-																"src": "711:1:0",
+																"src": "1209:1:0",
 																"typeDescriptions": {
 																	"typeIdentifier": "t_rational_0_by_1",
 																	"typeString": "int_const 0"
 																},
 																"value": "0"
 															},
-															"src": "699:13:0",
+															"src": "1197:13:0",
 															"typeDescriptions": {
 																"typeIdentifier": "t_bool",
 																"typeString": "bool"
@@ -286,14 +296,14 @@
 														},
 														{
 															"hexValue": "43616e6e6f74206c6f61642074686520636f6e747261637420776974682030",
-															"id": 18,
+															"id": 20,
 															"isConstant": false,
 															"isLValue": false,
 															"isPure": true,
 															"kind": "string",
 															"lValueRequested": false,
 															"nodeType": "Literal",
-															"src": "714:33:0",
+															"src": "1212:33:0",
 															"typeDescriptions": {
 																"typeIdentifier": "t_stringliteral_7a059d4a8f9259292aa96fea42b383ca7b72df04a4cd33736b75d63ed753a2c7",
 																"typeString": "literal_string \"Cannot load the contract with 0\""
@@ -312,7 +322,7 @@
 																"typeString": "literal_string \"Cannot load the contract with 0\""
 															}
 														],
-														"id": 13,
+														"id": 15,
 														"name": "require",
 														"nodeType": "Identifier",
 														"overloadedDeclarations": [
@@ -320,13 +330,13 @@
 															4294967278
 														],
 														"referencedDeclaration": 4294967278,
-														"src": "691:7:0",
+														"src": "1189:7:0",
 														"typeDescriptions": {
 															"typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
 															"typeString": "function (bool,string memory) pure"
 														}
 													},
-													"id": 19,
+													"id": 21,
 													"isConstant": false,
 													"isLValue": false,
 													"isPure": false,
@@ -335,46 +345,52 @@
 													"nameLocations": [],
 													"names": [],
 													"nodeType": "FunctionCall",
-													"src": "691:57:0",
+													"src": "1189:57:0",
 													"tryCall": false,
 													"typeDescriptions": {
 														"typeIdentifier": "t_tuple$__$",
 														"typeString": "tuple()"
 													}
 												},
-												"id": 20,
+												"id": 22,
 												"nodeType": "ExpressionStatement",
-												"src": "691:57:0"
+												"src": "1189:57:0"
 											},
 											{
-												"id": 21,
+												"id": 23,
 												"nodeType": "PlaceholderStatement",
-												"src": "759:1:0"
+												"src": "1257:1:0"
 											}
 										]
 									},
-									"id": 23,
+									"documentation": {
+										"id": 13,
+										"nodeType": "StructuredDocumentation",
+										"src": "949:194:0",
+										"text": " @dev Modifier to require value of a message being positive (DRY)\n \n @dev Requirements:\n @dev - The value sent with the message must be greater than zero"
+									},
+									"id": 25,
 									"name": "requireNonZeroValue",
-									"nameLocation": "660:19:0",
+									"nameLocation": "1158:19:0",
 									"nodeType": "ModifierDefinition",
 									"parameters": {
-										"id": 12,
+										"id": 14,
 										"nodeType": "ParameterList",
 										"parameters": [],
-										"src": "680:0:0"
+										"src": "1178:0:0"
 									},
-									"src": "651:117:0",
+									"src": "1149:117:0",
 									"virtual": false,
 									"visibility": "internal"
 								}
 							],
-							"scope": 25,
-							"src": "62:709:0",
+							"scope": 27,
+							"src": "366:903:0",
 							"usedErrors": [],
 							"usedEvents": []
 						}
 					],
-					"src": "33:738:0"
+					"src": "33:1236:0"
 				},
 				"id": 0
 			}

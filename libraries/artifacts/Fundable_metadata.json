@@ -30,7 +30,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"libraries/Demoable.sol": "Demoable"
+			"libraries/Fundable.sol": "Fundable"
 		},
 		"evmVersion": "shanghai",
 		"libraries": {},
@@ -44,12 +44,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"libraries/Demoable.sol": {
-			"keccak256": "0x618bedf1b4dede857a9f3513b2fa60724147d0479f1d48c3733b57c886f7c99b",
+		"libraries/Fundable.sol": {
+			"keccak256": "0x96e2d606b140477909443ea5860dfcd85bec648108c45e08d8fc48676a10574f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://514f77257bb3890e5d07e3458cb0be65535fbc04ca8445613322daf27458d559",
-				"dweb:/ipfs/QmbCBN5ks8KCMmqU322mn4BnTKXJZ9BVsu1dQ2zE6W5KEJ"
+				"bzz-raw://6900e56d50b00348b2c851248884c27d09e6e6d18e15b84285b59db71bfb57b5",
+				"dweb:/ipfs/QmQULAtsoF5jsvw4iRMMfVFpGKjug78yZX6xRe3LkX985N"
 			]
 		}
 	},

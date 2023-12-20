@@ -6,13 +6,17 @@
 	"output": {
 		"abi": [],
 		"devdoc": {
+			"author": "Fabian Diemand",
+			"custom:educational": "This library is intended only as an educational piece of work. No productive use is intended.",
 			"kind": "dev",
 			"methods": {},
+			"title": "An library for utility functions of the solar insurance contract",
 			"version": 1
 		},
 		"userdoc": {
 			"kind": "user",
 			"methods": {},
+			"notice": "The library contains several utility functions.",
 			"version": 1
 		}
 	},
@@ -57,11 +61,11 @@
 			]
 		},
 		"libraries/Utils.sol": {
-			"keccak256": "0x8ebe433afb49d89781b3c552014bcc90f5097abfdbfdaa8615ac5337921e8a0c",
+			"keccak256": "0x657703c3fd1f576bd93113a4c19e9f6c2fb4af0db8cccce311f4cadb0c236653",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://8ce56b3a63bcf888ae437bee09fc933cb08347a6e0637f7389ddb0afee631586",
-				"dweb:/ipfs/QmUFn8RDQMZ3yfVLyp1stw8mAquzmpbSnP3vEJrBKwYa3t"
+				"bzz-raw://03ecf85368d73bb75b1eb2f46335fd9e34db88703b0c0a43d4844524d10819aa",
+				"dweb:/ipfs/QmXfZcChjiJ6sAdoPQvFKyxKog1gJ3qnUViF1dXHTq5Fs6"
 			]
 		}
 	},
