@@ -6,7 +6,8 @@
   "scripts": {
     "compile": "npx hardhat compile",
     "deploy": "npx hardhat run scripts/deploy.js --network sepolia",
-    "interact": "npx hardhat run scripts/interact.js --network sepolia"
+    "interact": "npx hardhat run scripts/interact.js --network sepolia",
+    "verify": "npx hardhat verify --network sepolia 0x85e4486d93fDF7ffDa0a215422101Ac6a949ba6F"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/FabianDiemand/solar-insurance-smartcontract#readme",
   "devDependencies": {
+    "@nomicfoundation/hardhat-verify": "^2.0.3",
     "@nomiclabs/hardhat-ethers": "^2.2.3",
     "hardhat": "^2.19.3"
   },
