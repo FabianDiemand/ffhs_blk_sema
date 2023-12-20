@@ -1,9 +1,11 @@
 const { ethers } = require('hardhat');
 
 async function main(){
-  const SolarInsurance = await ethers.getContractFactory('SolarInsurance');
+  // factory as an abstraction for smart contract instances
+  const solarInsuranceFactory = await ethers.getContractFactory('SolarInsurance');
 
-  const solarInsurance = await SolarInsurance.deploy();
+  // results in a promise resolving to a contract instance
+  const solarInsurance = await solarInsuranceFactory.deploy();
   console.log('Contract address:', solarInsurance.address);
 }
 
