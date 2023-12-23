@@ -11,6 +11,8 @@ pragma solidity 0.8.22;
 */
 abstract contract Fundable{
 
+    event ContractFunded(address indexed _from, uint256 value);
+
     constructor() {}
 
     /*
@@ -21,6 +23,7 @@ abstract contract Fundable{
     * @dev If the `_value` is provided as zero, the function will revert the transaction.
     */
     function fundContract() public payable requireNonZeroValue {
+        emit ContractFunded(msg.sender, msg.value);
     }
 
     /**

@@ -82,7 +82,6 @@ contract SolarInsurance is Fundable {
     event DemoClaimFiled(address indexed _from, uint256 year);
     event ClaimRefused(address indexed _from, uint256 year, uint256 insuredHours, uint256 recordedHours);
     event ClaimAccepted(address indexed _from, uint256 year, uint256 insuredHours, uint256 recordedHours);
-    event ContractFunded(address indexed _from, uint256 value);
     event SunshineDurationRecorded(address indexed _from, uint256 year, uint256 duration, string region);
 
     constructor() {
