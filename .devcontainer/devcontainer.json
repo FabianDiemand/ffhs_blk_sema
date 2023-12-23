@@ -19,7 +19,14 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "npm install"
+	"postCreateCommand": "npm install",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"NomicFoundation.hardhat-solidity"
+			]
+		}
+	}
 
 	// Configure tool-specific properties.
 	// "customizations": {},
