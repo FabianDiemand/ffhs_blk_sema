@@ -69,7 +69,7 @@ contract SolarInsurance is Fundable {
         uint256 amount;
     }
     mapping(address => SolarInsurancePolicy) _policies;
-    mapping(address => uint256) public _allowedClaims;
+    mapping(address => uint256) _allowedClaims;
     mapping(address => Claim[]) _claims;
     mapping(address => uint256[]) _payments;
 
