@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.22;
 
+
 import "./libraries/Fundable.sol";
 import "./libraries/Utils.sol";
 
@@ -23,8 +24,10 @@ contract SolarInsurance is Fundable {
     // SolarInsurancePolicy struct modelling the metadata for a solar insurance policy
     struct SolarInsurancePolicy {
         address client; // The address of the client.
-        SwissRegion panelLocation; // The location of the solar panel (SOUTH or NORTH).
-        ClientRiskLevels riskLevel; // The risk level the client wants to insure (HIGH, MID, LOW).
+        SwissRegion panelLocation; // The location of the solar panel (0 or 1).
+        string locationName; // The location name as a string (Switzerland North or South).
+        InsuredRiskLevels riskLevel; // The risk level the client wants to insure (0, 1, 2).
+        string riskName; // The risk level name as a string (Low, Mid, High).
         uint256 panelArea; // The area of the solar panel in square meters.
         uint256 premiumToPay; // The premium amount to be paid by the client.
         uint256 registrationDate; // The timestamp of the policy registration.
@@ -37,20 +40,28 @@ contract SolarInsurance is Fundable {
         uint256 premium; // The premium per panel square meter per year.
         uint256 insuredHours; // The expected amount of yearly sunshine hours.
     }
-    enum ClientRiskLevels {
-        HIGH,
+    enum InsuredRiskLevels {
+        LOW,
         MID,
-        LOW
+        HIGH
     }
-    mapping(ClientRiskLevels => InsuranceLevel) _insuranceLevels;
+    mapping(InsuredRiskLevels => InsuranceLevel) _insuranceLevels;
 
     // Store sunshine duration per region for each year
     // Mapping uses <year>_<SwissRegion> as key, e.g. 2023_SOUTH
+    struct SunshineRecord {
+        SwissRegion region;
+        string regionName;
+        uint256 year;
+        uint256 sunshineDuration;
+    }
     enum SwissRegion {
         SOUTH,
         NORTH
     }
-    mapping(string => uint256) _sunshineRecords;
+    mapping(string => SunshineRecord) _sunshineRecords;
+    // Required to get sunshine records for the demo only!!
+    SunshineRecord[] _demoSunshineRecords;
 
     // Mappings for contracts, clients, claims and payments
     struct Claim {
@@ -58,22 +69,34 @@ contract SolarInsurance is Fundable {
         uint256 amount;
     }
     mapping(address => SolarInsurancePolicy) _policies;
-    mapping(address => uint256) _allowedClaims;
+    mapping(address => uint256) public _allowedClaims;
     mapping(address => Claim[]) _claims;
     mapping(address => uint256[]) _payments;
+
+    // Create events for write actions to allow debugging on deployed contracts
+    event PremiumCalculated(address indexed _from, string riskLevel, uint256 panelArea);
+    event PolicyRegistered(address indexed _from, string riskLevel, uint256 panelArea, string location, uint256 value);
+    event PolicyExtended(address indexed _from, uint256 value);
+    event PolicyDeleted(address indexed _from);
+    event ClaimFiled(address indexed _from, uint256 year);
+    event DemoClaimFiled(address indexed _from, uint256 year);
+    event ClaimRefused(address indexed _from, uint256 year, uint256 insuredHours, uint256 recordedHours);
+    event ClaimAccepted(address indexed _from, uint256 year, uint256 insuredHours, uint256 recordedHours);
+    event ContractFunded(address indexed _from, uint256 value);
+    event SunshineDurationRecorded(address indexed _from, uint256 year, uint256 duration, string region);
 
     constructor() {
         _owner = msg.sender;
         // Instantiate the risk levels to be covered
-        _insuranceLevels[ClientRiskLevels.HIGH] = InsuranceLevel(
+        _insuranceLevels[InsuredRiskLevels.LOW] = InsuranceLevel(
             0.00005 ether, 
             1639 
         );
-        _insuranceLevels[ClientRiskLevels.MID] = InsuranceLevel(
+        _insuranceLevels[InsuredRiskLevels.MID] = InsuranceLevel(
             0.00012 ether,
             1721
         );
-        _insuranceLevels[ClientRiskLevels.LOW] = InsuranceLevel(
+        _insuranceLevels[InsuredRiskLevels.HIGH] = InsuranceLevel(
             0.00035 ether,
             1803
         );
@@ -91,16 +114,18 @@ contract SolarInsurance is Fundable {
     * @dev - The client must not be actively insured.
     * @dev - The premium must be covered by the amount of wei sent with the message.
     */
-    function registerPolicy(ClientRiskLevels riskLevel, uint256 panelArea, SwissRegion location) public payable
+    function registerPolicy(InsuredRiskLevels riskLevel, uint256 panelArea, SwissRegion location) public payable
         requireNotInsured
         requirePremiumCovered(riskLevel, panelArea)
     {
         _policies[msg.sender] = SolarInsurancePolicy(
             msg.sender, // client
             location,
+            getRegionNames(location),
             riskLevel,
+            getRiskNames(riskLevel),
             panelArea,
-            panelArea * _insuranceLevels[riskLevel].premium, // premium to pay
+            panelArea * _insuranceLevels[riskLevel].premium,
             block.timestamp, // time of registration
             block.timestamp + 365 days, // valid until
             block.timestamp + 365 days // timeout for claims (first claim possible after 1 year)
@@ -110,6 +135,8 @@ contract SolarInsurance is Fundable {
         uint256 epochStartYear = 1970;
         _allowedClaims[msg.sender] = block.timestamp / yearInSeconds + epochStartYear;
         _payments[msg.sender].push(block.timestamp);
+
+        emit PolicyRegistered(msg.sender, getRiskNames(riskLevel), panelArea, getRegionNames(location), msg.value);
     }
 
     /**
@@ -129,6 +156,8 @@ contract SolarInsurance is Fundable {
         )
     {
         _policies[msg.sender].validUntil += 365 days;
+
+        emit PolicyExtended(msg.sender, msg.value);
     }
 
     /**
@@ -146,8 +175,9 @@ contract SolarInsurance is Fundable {
         requireInsured
         requireNoClaimTimeout
         requireYearClaimable(year)
-        requireRecordExists(year)
+        requireRecordExists(year, _policies[msg.sender].panelLocation)
     {
+        emit ClaimFiled(msg.sender, year);
         SolarInsurancePolicy memory p = _policies[msg.sender];
 
         // transfer the claimable amount (in wei)
@@ -159,7 +189,7 @@ contract SolarInsurance is Fundable {
         if (p.validUntil > 0) {
             // add a new year to be allowed for claims, if the validity allows it
             _allowedClaims[msg.sender] += 1;
-        }
+        }        
     }
 
     /**
@@ -192,9 +222,58 @@ contract SolarInsurance is Fundable {
     * @param panelArea The area of the solar panel (in square meters).
     * @return The calculated premium in wei.
     */
-    function calculatePremium(ClientRiskLevels riskLevel, uint256 panelArea) public view returns (uint256){
+    function calculatePremium(InsuredRiskLevels riskLevel, uint256 panelArea) public view returns (uint256){
         return panelArea * _insuranceLevels[riskLevel].premium; // premium to pay
     }
+
+    /**
+    * @notice Get details of the insured risk (insured hours, premium)
+    * 
+    * @return The InsuranceLevel specific to a key
+    * 
+    * @dev Requirements:
+    * @dev - The sender must be insured.
+    */
+    function getInsuredRiskByKey(InsuredRiskLevels riskLevel) public view 
+        returns(InsuranceLevel memory)
+    {
+        return _insuranceLevels[riskLevel];
+    }
+
+    /**
+    * @notice Get details of the insured risk (insured hours, premium)
+    * 
+    * @return The InsuranceLevel from the client's policy
+    * 
+    * @dev Requirements:
+    * @dev - The sender must be insured.
+    */
+    function getInsuredRiskOfPolicy() public view 
+        requireInsured
+        returns(InsuranceLevel memory)
+    {
+        InsuredRiskLevels riskLevel = _policies[msg.sender].riskLevel;
+        return _insuranceLevels[riskLevel];
+    }
+
+    /**
+    * @notice Get earliest sunshine record relevant for allowed claims by the sender
+    * 
+    * @return The earliest Sunshine Record relevant for the client's policy
+    * 
+    * @dev Requirements:
+    * @dev - The sender must be insured.
+    */
+    function getRelevantSunshineRecords() public view 
+        requireInsured
+        returns(SunshineRecord memory)
+    {
+        uint256 claimYear = _allowedClaims[msg.sender];
+        SwissRegion region = _policies[msg.sender].panelLocation;
+
+        string memory key = getRecordsKey(claimYear, region);
+        return _sunshineRecords[key];
+    } 
 
     /**
      * @notice Calculates the amount of claim in wei that can be filed for the specified year.
@@ -211,12 +290,19 @@ contract SolarInsurance is Fundable {
      * @param year The year for which the claim amount is calculated.
      * @return The amount to be claimed in wei.
      */
-    function getClaimAmount(uint256 year) internal view returns (uint256) {
-        string memory key = getRecordsKey(year);
-
+    function getClaimAmount(uint256 year) internal returns (uint256) {
         SolarInsurancePolicy memory p = _policies[msg.sender];
-        uint256 sunshineDelta = _insuranceLevels[p.riskLevel].insuredHours - _sunshineRecords[key];
+        string memory key = getRecordsKey(year, p.panelLocation);
+
+        uint256 sunshineDelta = _insuranceLevels[p.riskLevel].insuredHours - _sunshineRecords[key].sunshineDuration;
+
+        if(sunshineDelta <= 0){
+            emit ClaimRefused(msg.sender, year, _insuranceLevels[p.riskLevel].insuredHours, _sunshineRecords[key].sunshineDuration);
+            revert();
+        }
+
         uint256 amount = _RADIATION_VALUE * sunshineDelta * _EFFICIENCY * p.panelArea * _ENERGY_PRICE;
+        emit ClaimAccepted(msg.sender, year, _insuranceLevels[p.riskLevel].insuredHours, _sunshineRecords[key].sunshineDuration);
         return amount / 100000;
     }
 
@@ -226,14 +312,44 @@ contract SolarInsurance is Fundable {
     * @param year The year for which the records key is needed.
     * @return The records key in the format "<year>_<region>", e.g. "2023_SOUTH".
     */
-    function getRecordsKey(uint256 year) internal view 
+    function getRecordsKey(uint256 year, SwissRegion region) internal view 
         requireInsured
         returns (string memory)
     {
-        bool isLocationSouth = _policies[msg.sender].panelLocation == SwissRegion.SOUTH;
+        bool isLocationSouth = region == SwissRegion.SOUTH;
         string memory key = isLocationSouth ? Utils.getRecordId(year, "_SOUTH") : Utils.getRecordId(year, "_NORTH");
 
         return key;
+    }
+
+    /*
+    * @notice Get the key for a region in the SwissRegion enum as a string.
+    *
+    * @param region The region for which the stringified key is needed.
+    * @return stringified key of a region.
+    */
+    function getRegionNames(SwissRegion region) internal pure returns (string memory){
+        if(SwissRegion.NORTH == region){
+            return "Switzerland North";
+        } else { 
+            return "Switzerland South";
+        }
+    }
+
+    /*
+    * @notice Get the key for a risk in the InsuredRiskLevels enum as a string.
+    *
+    * @param region The risk for which the stringified key is needed.
+    * @return stringified key of a risk.
+    */
+    function getRiskNames(InsuredRiskLevels risk) internal pure returns (string memory){
+        if(InsuredRiskLevels.HIGH == risk){
+            return "High";
+        } else if(InsuredRiskLevels.MID == risk){
+            return "Mid";
+        } else {
+            return "Low";
+        }
     }
 
     /*
@@ -246,7 +362,21 @@ contract SolarInsurance is Fundable {
     function createSunshineRecord(uint256 year, uint256 duration, SwissRegion region) public {
         bool isLocationSouth = region == SwissRegion.SOUTH;
         string memory key = isLocationSouth ? Utils.getRecordId(year, "_SOUTH") : Utils.getRecordId(year, "_NORTH");
-        _sunshineRecords[key] = duration;
+
+        SunshineRecord memory record = SunshineRecord(
+            region,
+            getRegionNames(region),
+            year,
+            duration
+        );
+
+        // The way to handle the record in the intended way for real scenarios
+        _sunshineRecords[key] = record;
+
+        // Only done to allow the demo functionality!!
+        _demoSunshineRecords.push(record);
+
+        emit SunshineDurationRecorded(msg.sender, year, duration, getRegionNames(region));
     }
 
     /*
@@ -261,7 +391,8 @@ contract SolarInsurance is Fundable {
      */
     function fileClaimWithoutChecks(uint256 year) public
         requireInsured
-        requireRecordExists(year) {
+        requireRecordExists(year, _policies[msg.sender].panelLocation) {
+        emit DemoClaimFiled(msg.sender, year);
 
         // Calculate the claim amount
         uint256 claimAmount = getClaimAmount(year);
@@ -274,6 +405,34 @@ contract SolarInsurance is Fundable {
         if (_policies[msg.sender].validUntil > 0) {
             _allowedClaims[msg.sender] += 1;
         }
+    }
+
+    /**
+    * @notice Get sunshine record relevant for allowed claims by the sender without checking allowed claims (for demo purpose only!!)
+    * 
+    * @return The earliest Sunshine Record relevant for the client's policy
+    * 
+    * @dev Requirements:
+    * @dev - The sender must be insured.
+    */
+    function getRelevantSunshineRecordsWithoutChecks() public view 
+        requireInsured
+        returns(SunshineRecord[] memory)
+    {           
+        return _demoSunshineRecords;
+    } 
+
+    /*
+     * @notice Delete a policy (for demo purpose only!!)
+     *
+     * @dev Requirements:
+     * @dev - Client must be insured.
+     */
+    function deletePolicy() public 
+        requireInsured {
+
+        emit PolicyDeleted(msg.sender);
+        delete _policies[msg.sender];
     }
 
     /*
@@ -312,7 +471,7 @@ contract SolarInsurance is Fundable {
      * @dev Requirements:
      * @dev - Wei of message must cover the premium.
      */
-    modifier requirePremiumCovered(ClientRiskLevels riskLevel, uint256 panelArea) {
+    modifier requirePremiumCovered(InsuredRiskLevels riskLevel, uint256 panelArea) {
         // Calculate the premium for the policies risk level and the insured panel area
         uint256 prem = _insuranceLevels[riskLevel].premium * panelArea;
         
@@ -365,10 +524,10 @@ contract SolarInsurance is Fundable {
      * @dev Requirements:
      * @dev - A sunshine duration must be recorded for a given year
      */
-    modifier requireRecordExists(uint256 year) {
-        string memory key = getRecordsKey(year);
+    modifier requireRecordExists(uint256 year, SwissRegion region) {
+        string memory key = getRecordsKey(year, region);
 
-        bool recordExists = _sunshineRecords[key] != 0;
+        bool recordExists = _sunshineRecords[key].sunshineDuration != 0;
         require(
             recordExists,
             "There is no record for the required year or region."
