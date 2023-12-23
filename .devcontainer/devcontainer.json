@@ -6,7 +6,14 @@
 	"image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bullseye",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
+	"features": {
+		"ghcr.io/devcontainers/features/node:1": {}
+	},
+	"mounts": [{
+		"source": "/home/${localEnv:USER}/.ssh",
+		"target": "/home/node/.ssh",
+		"type": "bind"
+	}],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
