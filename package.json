@@ -7,7 +7,7 @@
     "compile": "npx hardhat compile",
     "deploy": "npx hardhat run scripts/deploy.js --network sepolia",
     "interact": "npx hardhat run scripts/interact.js --network sepolia",
-    "verify": "npx hardhat verify --network sepolia 0x85e4486d93fDF7ffDa0a215422101Ac6a949ba6F"
+    "verify": "npx hardhat verify --network sepolia 0x1e1364EE4c089579465143794eA4D13fED99838f"
   },
   "repository": {
     "type": "git",
