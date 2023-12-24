@@ -341,13 +341,14 @@ contract SolarInsurance is Fundable {
     * @param region The risk for which the stringified key is needed.
     * @return stringified key of a risk.
     */
-    function getRiskNames(InsuredRiskLevels risk) internal pure returns (string memory){
+    function getRiskNames(InsuredRiskLevels risk) internal view returns (string memory){
+        uint256 insuredHours = _insuranceLevels[risk].insuredHours;
         if(InsuredRiskLevels.HIGH == risk){
-            return "High";
+            return Utils.concatRiskInformation("High", insuredHours);
         } else if(InsuredRiskLevels.MID == risk){
-            return "Mid";
+            return Utils.concatRiskInformation("Mid", insuredHours);
         } else {
-            return "Low";
+            return Utils.concatRiskInformation("Low", insuredHours);
         }
     }
 

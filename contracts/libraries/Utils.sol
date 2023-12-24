@@ -22,4 +22,14 @@ library Utils {
     function getRecordId(uint256 year, string memory region) internal pure returns(string memory){
         return string.concat(Strings.toString(year), region);
     }
+
+    /*
+    * @dev Concatenates the risk and the corresponding insured hours to a string output.
+    * @param riskLevel The risk level
+    * @param hours The insured hours for the risk level
+    * @return The generated concatenated string
+    */
+    function concatRiskInformation(string memory riskLevel, uint256 insuredHours) internal pure returns(string memory){
+        return string.concat(riskLevel, " (", Strings.toString(insuredHours), " hours)");
+    }
 }
