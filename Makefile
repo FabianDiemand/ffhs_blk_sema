@@ -1,8 +1,6 @@
 .DEFAULT_GOAL := help
 ERROR := "\033[31m[%s]\033[0m %s\n"
 
-.ONESHELL: check-contract-chain hardhat-deploy
-
 hardhat-compile: # Compile the smart contract with hardhat
 	@npx hardhat compile
 
@@ -17,7 +15,6 @@ ifndef CONTRACT_ADDR
 	@printf $(ERROR) "CONTRACT_ADDR test not defined. Run 'export CONTRACT_ADDR=<contract address>'. Exiting."
 	exit 1
 endif
-
 
 check-contract-chain: # Make sure the CONTRACT_CHAIN env variable is specified
 ifndef CONTRACT_CHAIN
