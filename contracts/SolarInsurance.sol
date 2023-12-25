@@ -418,7 +418,6 @@ contract SolarInsurance is Fundable {
     * @dev - The sender must be insured.
     */
     function getRelevantSunshineRecordsWithoutChecks() public view 
-        requireInsured
         returns(SunshineRecord[] memory)
     {           
         return _demoSunshineRecords;
