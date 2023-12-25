@@ -359,7 +359,9 @@ contract SolarInsurance is Fundable {
      * @param region The region for which the sunshine duration is recorded (SOUTH or NORTH).
      * @param duration The duration of sunshine in the specified year and region.
      */
-    function createSunshineRecord(uint256 year, uint256 duration, SwissRegion region) public {
+    function createSunshineRecord(uint256 year, uint256 duration, SwissRegion region) public
+        requireNonExistingRecord(year, region)
+     {
         bool isLocationSouth = region == SwissRegion.SOUTH;
         string memory key = isLocationSouth ? Utils.getRecordId(year, "_SOUTH") : Utils.getRecordId(year, "_NORTH");
 
@@ -562,6 +564,25 @@ contract SolarInsurance is Fundable {
         require(
            isYearClaimable,
             "The specified year is not allowing a claim for your policy."
+        );
+        _;
+    }
+
+    /**
+     * @dev Modifier to require a record to not already being existent (DRY)
+     * 
+     * @dev Requirements:
+     * @dev - The given record must not already be part of the sunshine records
+     */
+    modifier requireNonExistingRecord(uint256 year, SwissRegion region) {
+        bool isLocationSouth = region == SwissRegion.SOUTH;
+        string memory key = isLocationSouth ? Utils.getRecordId(year, "_SOUTH") : Utils.getRecordId(year, "_NORTH");
+        
+        bool isRecordExisting = _sunshineRecords[key].year > 0;
+
+        require(
+            !isRecordExisting,
+            "Cannot create the record, due to a clash with an already existing record."
         );
         _;
     }
