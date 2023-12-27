@@ -11,7 +11,16 @@ Repository Frontend: https://github.com/FabianDiemand/solar-insurance-frontend
 
 ## Inhalt
 * [1 Einleitung](#1-einleitung)
-* [2 Deployment](#2-deployment)
+* [2 Frontend](#2-deployment)
+* [3 Erklärung Smart Contract](#3-erklärung-smart-contract)
+  * [3.1 Schnittstellen](#31-schnittstellen)
+  * [3.2 Bedingungen](#32-bedingungen)
+* [4 Technologien und Services](#4-technologien-und-services)
+  * [4.1 Remix Ethereum IDE](#41-remix-ethereum-ide)
+  * [4.2 VS Code und Docker](#42-vs-code-und-docker)
+  * [4.3 Hardhat](#43-hardhat)
+  * [4.4 Weitere](#44-weitere)
+* [5 Deployment](#5-deployment)
 
 
 ---
@@ -23,7 +32,29 @@ Im Rahmen diese Semesterarbeit wurde ein Smart Contract geschrieben, der die Pol
 
 Die Erkenntnis, dass dieser Indikator nicht alleine relevant für eine Aussage über das Auftreten und das Ausmass eines potenziellen Schadens ist, ist für den Realitätsbezug relevant. Für die Semesterarbeit wird diese Feststellung nicht weiter verarbeitet. Ebenso werden Systemabhängigkeiten von Dritt-APIs zur Datenabfrage und externen Services (namentlich Chainlink) nur im Entwurf erwähnt. Der Fokus liegt auf der Umsetzung des Smart Contracts, dessen Deployment, Verifizierung und der Interaktion mit diesem durch eine grafische Schnittstelle.
 
-## 2 Deployment
+## 2 Frontend
+
+## 3 Erklärung Smart Contract
+
+### 3.1 Schnittstellen
+
+### 3.2 Bedingungen
+
+## 4 Technologien und Services
+
+### 4.1 Remix Ethereum IDE
+
+### 4.2 VS Code und Docker
+
+### 4.3 Hardhat
+
+### 4.4 Weitere
+
+#### Ethers.js
+
+#### Makefile
+
+## 5 Deployment
 ### :bangbang: Wichtig :bangbang:
 Für die Inbetriebnahme des Frontend ist grundsätzlich kein erneutes Deployment des Smart Contracts notwendig. Soll lediglich die Grundfunktionsweise der DApp getestet werden, kann diese Anleitung ignoriert werden und direkt mit der [Installation des Frontends](https://github.com/FabianDiemand/solar-insurance-frontend/blob/main/.doc/doc.md#5-installation) begonnen werden.
 
