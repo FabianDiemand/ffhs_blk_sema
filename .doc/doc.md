@@ -13,13 +13,16 @@ Repository Frontend: https://github.com/FabianDiemand/solar-insurance-frontend
 * [1 Einleitung](#1-einleitung)
 * [2 Frontend](#2-deployment)
 * [3 Erklärung Smart Contract](#3-erklärung-smart-contract)
-  * [3.1 Schnittstellen](#31-schnittstellen)
-  * [3.2 Bedingungen](#32-bedingungen)
+  * [3.1 Konstanten](#31-konstanten)
+  * [3.2 Schnittstellen](#32-schnittstellen)
+  * [3.3 Bedingungen](#33-bedingungen)
 * [4 Technologien und Services](#4-technologien-und-services)
-  * [4.1 Remix Ethereum IDE](#41-remix-ethereum-ide)
-  * [4.2 VS Code und Docker](#42-vs-code-und-docker)
-  * [4.3 Hardhat](#43-hardhat)
-  * [4.4 Weitere](#44-weitere)
+  * [4.1 Solidity](#41-solidity)
+  * [4.2 Remix Ethereum IDE](#42-remix-ethereum-ide)
+  * [4.3 VS Code und Docker](#43-vs-code-und-docker)
+  * [4.4 Hardhat](#44-hardhat)
+  * [4.5 Sepolia Testchain](#45-sepolia-testchain)
+  * [4.6 Weitere](#46-weitere)
 * [5 Deployment](#5-deployment)
 
 
@@ -33,22 +36,42 @@ Im Rahmen diese Semesterarbeit wurde ein Smart Contract geschrieben, der die Pol
 Die Erkenntnis, dass dieser Indikator nicht alleine relevant für eine Aussage über das Auftreten und das Ausmass eines potenziellen Schadens ist, ist für den Realitätsbezug relevant. Für die Semesterarbeit wird diese Feststellung nicht weiter verarbeitet. Ebenso werden Systemabhängigkeiten von Dritt-APIs zur Datenabfrage und externen Services (namentlich Chainlink) nur im Entwurf erwähnt. Der Fokus liegt auf der Umsetzung des Smart Contracts, dessen Deployment, Verifizierung und der Interaktion mit diesem durch eine grafische Schnittstelle.
 
 ## 2 Frontend
+Die GUI der Solar Insurance DApp setzt sich aus einer Landing Page ('Insurance') und einer Demo Ansicht ('Demo') zusammen. Die Landing Page bildet die Zugriffsschnittstelle auf die für eine produktive Verwendung notwendigen Funktionen des Smart Contracts. Die Demo Ansicht hilft bei der Verwendung der DApp zu Demo und Test-Zwecken. Sie erlaubt Zustandsänderungen, die üblicherweise durch Interaktionen mit anderen Nutzern oder APIs ('Fund Contract', 'Create Sunshine Record') oder unter stärkeren Einschränkungen ('File Claim') möglich sind.
+
+Weitere Details zum Smart Contract sind in der Dokumentation zum [Frontend](https://github.com/FabianDiemand/solar-insurance-frontend), sowie in der zugehörigen Semesterarbeit dokumentiert.
 
 ## 3 Erklärung Smart Contract
+Die Solar Insurance DApp setzt sich aus einem Frontend und einem Smart Contract zusammen. Der Smart Contract ist unter der Adresse [0x1c668eafa578dc863e4776407a175341aa5d0965](https://sepolia.etherscan.io/address/0x1c668eafa578dc863e4776407a175341aa5d0965) auf der Seplia Testchain bereitgestellt. Deployment und Code des Contracts, sowie die ABI, Transaktionen und Event Logs können in Etherscan eingesehen werden.
 
-### 3.1 Schnittstellen
+### 3.1 Konstanten
 
-### 3.2 Bedingungen
+#### Berechnungskonstanten
+
+#### Risiko-Levels
+
+### 3.2 Schnittstellen
+|Name   |Parameter   |Beschreibung   |  
+|---|---|---|
+||||
+
+### 3.3 Bedingungen
+|Name |Parameter |Beschreibung |
+|---|---|---|
+||||
 
 ## 4 Technologien und Services
 
-### 4.1 Remix Ethereum IDE
+### 4.1 Solidity
 
-### 4.2 VS Code und Docker
+### 4.2 Remix Ethereum IDE
 
-### 4.3 Hardhat
+### 4.3 VS Code und Docker
 
-### 4.4 Weitere
+### 4.4 Hardhat
+
+### 4.5 Sepolia Testchain
+
+### 4.6 Weitere
 
 #### Ethers.js
 
