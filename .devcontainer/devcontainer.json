@@ -23,7 +23,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"NomicFoundation.hardhat-solidity"
+				"NomicFoundation.hardhat-solidity",
+				"ms-vscode.makefile-tools"
 			]
 		}
 	}
