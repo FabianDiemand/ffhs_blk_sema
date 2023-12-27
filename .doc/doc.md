@@ -1,4 +1,4 @@
-![Solar Insurance Logo](./.doc/img/logo_w_text.png)
+![Solar Insurance Logo](./img/logo_w_text.png)
 
 # Solar Insurance DApp Smart Contract
 
@@ -7,10 +7,23 @@ Dozenten: Malik El Bay, Oliver Dressler
 Repository Smart Contract:  https://github.com/FabianDiemand/solar-insurance-smartcontract  
 Repository Frontend: https://github.com/FabianDiemand/solar-insurance-frontend  
 
-## Info
-Der Smart Contract ist im Rahmen einer Semesterarbeit des Moduls Blockchain an der Fernfachhochschule Schweiz entstanden. Weitere Informationen zu der Arbeit, eine Beschreibung des zugehörigen Frontends, der API und der Bedingungen im Contract sind in der [Dokumentation](./.doc/doc.md) zu finden.
+---
 
-## Deployment
+## Inhalt
+* [1 Einleitung](#1-einleitung)
+* [2 Deployment](#2-deployment)
+
+
+---
+
+## 1 Einleitung
+Im Rahmen des Moduls Blockchain wurde sich mit Technologien, Anwendungsfällen und rechtlich-wirtschaftlichen Themen rund um die namensgebende Datenstruktur befasst. Teile des Gelernten sollten im Rahmen einer Semesterarbeit mit einer Literatur- oder Engineering-Arbeit angewandt werden.
+
+Im Rahmen diese Semesterarbeit wurde ein Smart Contract geschrieben, der die Policies einer Versicherung für Betreiber einer Photovoltaik-Anlage (fortan PV-Anlage) modelliert. Der versicherte Schaden ist der finanzielle Mehraufwand, durch den Bezug von Strom aus dem Hauptnetz anstelle der eigenen PV-Anlage. Als Indikator für einen Schadenfall wird die Anzahl Sonnenscheinstunden pro Jahr herangezogen.
+
+Die Erkenntnis, dass dieser Indikator nicht alleine relevant für eine Aussage über das Auftreten und das Ausmass eines potenziellen Schadens ist, ist für den Realitätsbezug relevant. Für die Semesterarbeit wird diese Feststellung nicht weiter verarbeitet. Ebenso werden Systemabhängigkeiten von Dritt-APIs zur Datenabfrage und externen Services (namentlich Chainlink) nur im Entwurf erwähnt. Der Fokus liegt auf der Umsetzung des Smart Contracts, dessen Deployment, Verifizierung und der Interaktion mit diesem durch eine grafische Schnittstelle.
+
+## 2 Deployment
 ### :bangbang: Wichtig :bangbang:
 Für die Inbetriebnahme des Frontend ist grundsätzlich kein erneutes Deployment des Smart Contracts notwendig. Soll lediglich die Grundfunktionsweise der DApp getestet werden, kann diese Anleitung ignoriert werden und direkt mit der [Installation des Frontends](https://github.com/FabianDiemand/solar-insurance-frontend/blob/main/.doc/doc.md#5-installation) begonnen werden.
 
@@ -31,7 +44,7 @@ Für die Inbetriebnahme des Frontend ist grundsätzlich kein erneutes Deployment
    ```
 
 3. **EMPFOHLEN:** Öffne das Projekt im entsprechenden Dev Container *(Ctrl + P -> 'Dev Containers: Reopen in Container')* <br>
-   ![Dev Con](./.doc/img/devcon.png) <br><br>
+   ![Dev Con](./img/devcon.png) <br><br>
 
    **ALTERNATIV:** Installiere alle Abhängigkeiten lokal
    ```bash
@@ -78,3 +91,4 @@ Für die Inbetriebnahme des Frontend ist grundsätzlich kein erneutes Deployment
   <br>
 
 7. Damit das Frontend mit dem richtigen Vertrag interagiert, müssen die Variablen im .env-File des [solar-insurance-frontend](https://github.com/FabianDiemand/solar-insurance-frontend) Projekts entsprechend angepasst werden.
+
