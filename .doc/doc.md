@@ -13,7 +13,7 @@ Repository Frontend: https://github.com/FabianDiemand/solar-insurance-frontend
 * [1 Einleitung](#1-einleitung)
 * [2 Frontend](#2-deployment)
 * [3 Erklärung Smart Contract](#3-erklärung-smart-contract)
-  * [3.1 Konstanten](#31-konstanten)
+  * [3.1 Konstanten](#31-konstanten-und-formeln)
   * [3.2 Schnittstellen](#32-schnittstellen)
   * [3.3 Bedingungen](#33-bedingungen)
 * [4 Technologien und Services](#4-technologien-und-services)
@@ -43,11 +43,36 @@ Weitere Details zum Smart Contract sind in der Dokumentation zum [Frontend](http
 ## 3 Erklärung Smart Contract
 Die Solar Insurance DApp setzt sich aus einem Frontend und einem Smart Contract zusammen. Der Smart Contract ist unter der Adresse [0x1c668eafa578dc863e4776407a175341aa5d0965](https://sepolia.etherscan.io/address/0x1c668eafa578dc863e4776407a175341aa5d0965) auf der Seplia Testchain bereitgestellt. Deployment und Code des Contracts, sowie die ABI, Transaktionen und Event Logs können in Etherscan eingesehen werden.
 
-### 3.1 Konstanten
+### 3.1 Konstanten und Formeln
+Im Kontext dieser Dokumentation werden die Konstanten lediglich aufgelistet. Die Herleitung ist detaillierter in der zugehörigen Semesterarbeit erläutert.
 
 #### Berechnungskonstanten
+|||
+|---|---|
+|Energiepreis im Hauptnetz|0.00016 Ether pro kWh|
+|Strahlungswert der Sonne|150 W/m<sup>2</sup>|
+|Wirkungsgrad von PV Panels|20 %|
 
 #### Risiko-Levels
+|Level|Risiko der Versicherung|Sonnenscheinstunden|Prämie pro m<sup>2</sup>|
+|---|---|---|---|
+|1|Tief|1639|0.00005 Ether|
+|2|Mittel|1721|0.00012 Ether|
+|3|Hoch|1803|0.00035 Ether|
+
+#### Berechnungsformel für Schadenfälle
+$d: \text{Schadensumme in Ether}$<br>
+$rad: \text{Strahlungswert}$<br>
+$e: \text{Wirkungsgrad}$<br>
+$p: \text{Energiepreis in Ether}$<br>
+$a: \text{Fläche der Anlage in m}^2$<br>
+$sun_{ins}: \text{Anzahl vesicherter Sonnenscheinstunden}$<br>
+$sun_{rec}: \text{Anzahl aufgezeichneter Sonnenscheinstunden}$<br>
+$\delta sun: \text{Diskrepanz der Sonnenstunden}$<br>
+
+$$ \delta sun = sun_{ins} - sun_{rec}: sun_{ins} > sun_{rec} $$
+
+$$ d = {rad \over 1000} * {e \over 100} * p * a * \delta sun $$
 
 ### 3.2 Öffentliche Schnittstelle
 #### Hauptfunktionen
