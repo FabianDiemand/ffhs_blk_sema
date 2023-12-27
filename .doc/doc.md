@@ -100,9 +100,18 @@ Die Demo-Funktionen bilden den Teil der Schnittstelle zum Smart Contract, welche
 |fundContract|-|Importiert aus der eigenen 'Fundable' Library. Erlaubt die Finanzierung des Contracts. Durch die fehlende Kundenmenge, muss zu Demo-Zwecken eine initiale Finanzierung stattfinden, welche die Auszahlung von Schadenersatz-Summen erlaubt.|
 
 ### 3.3 Bedingungen
+Bedingungen werden mit [Modifiern](https://solidity-by-example.org/function-modifier/) realisiert, um das DRY-Prinzip (Don't repeat yourself) einzuhalten und den Code lesbarer zu gestalten.
 |Name |Parameter |Beschreibung |
 |---|---|---|
-||||
+|requireOwner|-|Stellt sicher, dass der Aufrufer auch der Besitzer des Smart Contracts ist.|
+|requireValidAddress|-|Stellt sicher, dass der Aufrufer nicht eine 0-Adresse ist.|
+|requirePremiumCovered|riskLevel, panelArea|Stellt sicher, dass der Wert der Transaktion der geforderten Prämie entspricht|
+|requireNotInsured|-|Stellt sicher, dass der Aufrufer **nicht** bereits eine Police abgeschlossen hat.|
+|requireInsured|-|Stellt sicher, dass der Aufrufer bereits eine Police abgeschlossen hat.|
+|requireRecordExists|year, region|Stellt sicher, dass eine Aufzeichnung von Sonnenstunden für ein bestimmtes Jahr in einer bestimmten Region existiert.|
+|requireNonExistingRecord|year, region|Stellt sicher, dass für ein bestimmtes Jahr in einer bestimmten Region noch keine Aufzeichnung von Sonnenstunden eingetragen ist.|
+|requireYearClaimable|year|Stellt sicher, dass der Aufrufer für ein bestimmtes Jahr eine Forderung stellen darf.|
+
 
 ## 4 Technologien und Services
 
