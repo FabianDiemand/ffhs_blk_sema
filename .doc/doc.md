@@ -47,7 +47,7 @@ Die Solar Insurance DApp setzt sich aus einem Frontend und einem Smart Contract 
 Im Kontext dieser Dokumentation werden die Konstanten lediglich aufgelistet. Die Herleitung ist detaillierter in der zugehörigen Semesterarbeit erläutert.
 
 #### Berechnungskonstanten
-|||
+|Bezeichnung|Wert|
 |---|---|
 |Energiepreis im Hauptnetz|0.00016 Ether pro kWh|
 |Strahlungswert der Sonne|150 W/m<sup>2</sup>|
