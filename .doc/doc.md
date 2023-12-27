@@ -54,25 +54,25 @@ Im Kontext dieser Dokumentation werden die Konstanten lediglich aufgelistet. Die
 |Wirkungsgrad von PV Panels|20 %|
 
 #### Risiko-Levels
-|Level|Risiko der Versicherung|Sonnenscheinstunden|Prämie pro m<sup>2</sup>|
+|Level|Risiko der Versicherung|Versicherte Sonnenscheinstunden|Prämie pro m<sup>2</sup>|
 |---|---|---|---|
 |1|Tief|1639|0.00005 Ether|
 |2|Mittel|1721|0.00012 Ether|
 |3|Hoch|1803|0.00035 Ether|
 
 #### Berechnungsformel für Schadenfälle
-$d: \text{Schadensumme in Ether}$<br>
-$rad: \text{Strahlungswert}$<br>
-$e: \text{Wirkungsgrad}$<br>
-$p: \text{Energiepreis in Ether}$<br>
+$rad: \text{Strahlungswert in Watt pro m}^2 = 150$<br>
+$e: \text{Wirkungsgrad in Prozent} = 20$<br>
+$p_{eth}: \text{Energiepreis in Ether} = 0.00016$<br>
 $a: \text{Fläche der Anlage in m}^2$<br>
 $sun_{ins}: \text{Anzahl vesicherter Sonnenscheinstunden}$<br>
 $sun_{rec}: \text{Anzahl aufgezeichneter Sonnenscheinstunden}$<br>
 $\delta sun: \text{Diskrepanz der Sonnenstunden}$<br>
+$d_{eth}: \text{Schadensumme in Ether}$<br>
 
 $$ \delta sun = sun_{ins} - sun_{rec}: sun_{ins} > sun_{rec} $$
 
-$$ d = {rad \over 1000} * {e \over 100} * p * a * \delta sun $$
+$$ d_{eth} = {rad \over 1000} * {e \over 100} * p_{eth} * a * \delta sun $$
 
 ### 3.2 Öffentliche Schnittstelle
 #### Hauptfunktionen
