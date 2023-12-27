@@ -49,10 +49,30 @@ Die Solar Insurance DApp setzt sich aus einem Frontend und einem Smart Contract 
 
 #### Risiko-Levels
 
-### 3.2 Schnittstellen
+### 3.2 Öffentliche Schnittstelle
+#### Hauptfunktionen
+Die Hauptfunktionen bilden die öffentliche Schnittstelle, wie sie bei einer tatsächlichen Anwendung mit dem Smart Contract implementiert wären.
+
 |Name   |Parameter   |Beschreibung   |  
 |---|---|---|
-||||
+|registerPolicy|riskLevel, panelArea, location|Schliesst eine Police entsprechend der übergebenen Konfigurations-Parameter ab. Das riskLevel beschreibt dabei, die Höhe des Risikos, welches durch die Versicherung getragen wird. Diese ist korreliert positiv mit der Prämie, welche zum Abschluss anfällt. Gleich verhält es sich mit der panelArea, also der Fläche der PV-Anlage, die versichert wird. Die location der Anlage ist letztlich relevant, um die Betroffenheit durch ausbleibende Sonnenstunden zu bestimmen.
+|extendPolicy|-|Verlängert die Policy des Aufrufers um ein Jahr in exakt der bisherigen Konfiguration, sofern eine Police existiert. Existiert bisher keine Police, wird die Transaktion rückgängig gemacht. |
+|fileClaim|year|Eröffnet eine Schadenersatz-Forderung und wickelt diese entsprechend der Bedingungen der Police ab. Relevant dabei ist das Jahr, welches als Argument mitgegeben wird und welche Region für den Abschluss der Police angegeben wurde. Diese Faktoren bestimmen, welche Aufzeichnung von Sonnenscheinstunden zur Bewertung herangezogen werden. Massgeblich ist das Kriterium, ob eine Diskrepanz zwischen versicherten und tatsächlichen Sonnenscheinstunden zum Nachteil des Versicherten vorliegt. Der erstattete Betrag berechnet sich aus dem entfallenen Solarstrom-Ertrag in Kilowattstunden, multipliziert mit dem Strompreis des Hauptnetzes.|
+|calculatePremium|riskLevel, panelArea|Berechnet die Höhe der Prämie die für eine bestimmte Police anfallen würde. Dafür werden wiederum der riskLevel und die Fläche der zu versicherten Anlage angegeben.|
+|getPolicyInformation|-|Gibt die Informationen über die Police des Aufrufers zurück.
+|getInsuredRiskByKey|riskLevel|Gibt die Detail-Informationen über die verischerten Sonnenstunden und die Prämie pro einem (1) Quadratmeter Anlagenfläche des als Argument übergebenen riskLevels zurück.
+|getInsuredRiskOfPolicy|-|Gibt die Detail-Informationen über die verischerten Sonnenstunden und die Prämie pro einem (1) Quadratmeter Anlagenfläche des riskLevels der Versicherung vom Aufrufer.|
+|getRelevantSunshineRecords|-|Gibt die Sonnenscheinstunden, das Jahr und die betroffene Region zurück, welche für die Police des Aufrufers relevant sind. Dabei werden nur die Aufzeichnungen angegeben, für die der Aufrufer noch einen Schadenersatz anfordern darf.|
+|createSunshineRecord|year, duration, region|Erzeugt eine Aufzeichnung von Sonnenscheinstunden für ein bestimmtes Jahr in einer bestimmten Region (Süden, Norden). Die Funktion wird im Rahmen der Semesterarbeit vom Nutzer als Demo-Funktion aufgerufen, stünde in einem produktiven Szenario allerding nur dem Orakel zur Verfügung.|
+
+#### Demo-Funktionen
+Die Demo-Funktionen bilden den Teil der Schnittstelle zum Smart Contract, welche nur zum Zwecke der Demo/ des Tests für die Semesterarbeit implementiert wurden.
+|Name   |Parameter   |Beschreibung   |  
+|---|---|---|
+|fileClaimWithoutChecks|year|Funktioniert im Kern identisch, wie die produktive Funktion 'fileClaim', lässt aber bis auf die Überprüfung einer existierenden Police und einer existierenden Aufzeichnung, sämtliche weiteren Checks aus.|
+|getRelevantSunshineRecordsWithoutChecks|-|Gibt sämtliche Aufzeichnungen von Sonnenscheinstunden, unabhängig derer Relevanz für die abgeschlossene Police zurück. So kann zu Demo-Zwecken flexibel ein Schadenanspruch ausgelöst werden.|
+|deletePolicy|-|Löscht eine existierende Police des Aufrufers, falls eine existiert. So können zu Demo-Zwecken verschiedene Policen abgeschlossen werden.|
+|fundContract|-|Importiert aus der eigenen 'Fundable' Library. Erlaubt die Finanzierung des Contracts. Durch die fehlende Kundenmenge, muss zu Demo-Zwecken eine initiale Finanzierung stattfinden, welche die Auszahlung von Schadenersatz-Summen erlaubt.|
 
 ### 3.3 Bedingungen
 |Name |Parameter |Beschreibung |
