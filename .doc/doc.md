@@ -11,9 +11,9 @@ Repository Frontend: https://github.com/FabianDiemand/solar-insurance-frontend
 
 ## Inhalt
 * [1 Einleitung](#1-einleitung)
-* [2 Frontend](#2-deployment)
+* [2 Frontend](#2-frontend)
 * [3 Erklärung Smart Contract](#3-erklärung-smart-contract)
-  * [3.1 Konstanten](#31-konstanten-und-formeln)
+  * [3.1 Konstanten und Formeln](#31-konstanten-und-formeln)
   * [3.2 Schnittstellen](#32-schnittstellen)
   * [3.3 Bedingungen](#33-bedingungen)
 * [4 Technologien und Services](#4-technologien-und-services)
