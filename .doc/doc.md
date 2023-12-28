@@ -116,20 +116,33 @@ Bedingungen werden mit [Modifiern](https://solidity-by-example.org/function-modi
 ## 4 Technologien und Services
 
 ### 4.1 Solidity
+Der Smart Contract ist in [Solidity](https://soliditylang.org/) geschrieben. Solidity ist eine Programmiersprache, welche für Smart Contracts auf Ethereum Blockchains verwendet wird. Aus dem Highlevel Code in Solidity wird ein Bytecode kompiliert, welcher durch die [Ethereum Virtual Machine (EVM)](https://ethereum.org/en/developers/docs/evm/) interpretiert und ausgeführt wird. Für die Semesterarbeit kommt Solidity in der [Version 0.8.22](https://docs.soliditylang.org/en/v0.8.22/) zum Einsatz.
+
+Die syntaktische Nähe zu JavaScript, die aktive Community und damit einhergehend die ausführliche Dokumentation der Programmiersprache gaben den Ausschlag zu dieser Entscheidung.
 
 ### 4.2 Remix Ethereum IDE
+[Remix](https://remix-project.org/) ist eine Online IDE für die Entwicklung von Smart Contracts in Solidity. Grosse Teile des Smart Contract wurden in Remix entwickelt und getestet. Eine Limitierung von Remix ist die Interaktion mit Versionsverwaltungssystemen, welche sich etwas schwerfällig gestaltet.
+
+Die Verwendung im Unterricht, die Zeitersparnis durch das Wegfallen einer lokalen Umgebung und der Reifegrad von Remix haben zu dieser Entscheidung beigetragen.
 
 ### 4.3 VS Code und Docker
+Gegen Ende der Semesterarbeit wurde auf eine lokale Entwicklungsumgebung in einem [Development Container](https://containers.dev/) und [Visual Studio Code](https://code.visualstudio.com/) als Editor umgestiegen. So konnten Kompilation, Bereitstellung und Verifikation des Smart Contracts mit Scripts automatisiert werden. Ausserdem konnte der Workflow mit Versionsverwaltungssystemen so vereinfacht werden.
+Der Development Container ist ein praktisches Werkzeug, um die benötigten Werkzeuge für die Entwicklung nur während der Entwicklungsphase in einer isolierten Umgebung installieren zu müssen. Als Runtime für den Dev Container wird Docker eingesetzt.
 
 ### 4.4 Hardhat
+Kompilation, Deployment und Verifikation bzw. Veröffentlichung des Source Codes des Smart Contract in Etherscan wurden mit [Hardhat](https://hardhat.org/) realisiert. Mit Hardhat kann eine lokale Entwicklungsumgebung für Smart Contracts eingesetzt werden, welche einen ähnlichen Umfang an Funktionalität bietet, wie die Remix IDE. Allerdings ist der Entwickler was die Konfiguration der Umgebung, sowie deren Erweiterung um andere Komponenten und Automatisierungen angeht mit Hardhat wesentlich flexibler als in Remix.
 
 ### 4.5 Sepolia Testchain
+Um die Interaktion mit dem Smart Contract möglichst Realitätsnah zu gestalten und nebst dem Frontend nicht auch eine Instanz des Smart Contracts in einem Hardhat Node lokal verfügbar haben zu müssen, wird der Smart Contract auf der [Sepolia Testchain](https://sepolia.dev/) bereitsgestellt. Damit mit dem Smart Contract interagiert werden kann (zumindest für Schreib-Operationen), müssen SepoliaETH aus einem Faucet ([1](https://sepoliafaucet.com/), [2](https://sepolia-faucet.pk910.de/)) bezogen werden.
 
 ### 4.6 Weitere
 
-#### Ethers.js
+#### hardhat-ethers
+Um einzelne Funktionen des Smart Contracts lokal aufzurufen wurde ausserdem die [hardhat-ethers](https://hardhat.org/hardhat-runner/plugins/nomicfoundation-hardhat-ethers) Library verwendet.
 
-#### Makefile
+#### GNU make
+Da npm-Scripts funktional limitiert sind (insbesondere was Überprüfungen vor der Ausführung von Befehlen angeht) und für die Hardhat-Befehle einige Informationen (namentlich die Zielchain für das Deployment und die Adresse des Contracts für dessen Verifizierung) als ENV Variablen spezifiziert werden sollen, werden die Hardhat Befehle mit [Make Targets](https://www.gnu.org/software/make/manual/make.html) abstrahiert.
+
 
 ## 5 Deployment
 ### :bangbang: Wichtig :bangbang:
